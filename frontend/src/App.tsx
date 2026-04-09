@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, NavLink, useLocation, Navigate } from 'react-router-dom'
-import { BarChart3, Users, ShieldCheck, CalendarCheck, DollarSign, Target, Calculator, Layers, GitBranch, FileSearch, AlertTriangle, Bell, ClipboardList, LogOut, CheckSquare, Building2, MessageSquare, Search, Settings } from 'lucide-react'
+import { BarChart3, Users, ShieldCheck, CalendarCheck, DollarSign, Target, Calculator, Layers, GitBranch, FileSearch, AlertTriangle, Bell, ClipboardList, LogOut, CheckSquare, Building2, MessageSquare, Search, Settings, BookOpen } from 'lucide-react'
 import { api, AuthUser } from './api'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
@@ -20,6 +20,7 @@ import Approvals from './pages/Approvals'
 import CorporateSolutions from './pages/CorporateSolutions'
 import AICommHub from './pages/AICommHub'
 import AIChat from './components/AIChat'
+import UserGuide from './pages/UserGuide'
 import './App.css'
 
 const NAV_MAIN = [
@@ -41,6 +42,7 @@ const NAV_MAIN = [
 
 const NAV_BOTTOM = [
   { to: '/audit', icon: ClipboardList, label: 'Audit Trail' },
+  { to: '/guide', icon: BookOpen, label: 'User Guide' },
 ]
 
 const PAGE_TITLES: Record<string, string> = {
@@ -59,6 +61,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/corporate': 'Corporate Solutions',
   '/ai-hub': 'AI Communication Hub',
   '/audit': 'Audit Trail',
+  '/guide': 'User Guide',
 }
 
 export default function App() {
@@ -224,6 +227,7 @@ export default function App() {
           <Route path="/approvals" element={<Approvals />} />
           <Route path="/corporate" element={<CorporateSolutions />} />
           <Route path="/ai-hub" element={<AICommHub />} />
+          <Route path="/guide" element={<UserGuide />} />
           <Route path="/login" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
