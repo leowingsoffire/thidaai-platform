@@ -216,7 +216,7 @@ def _daily_pipeline(db: Session):
         for d in deals[:5]:
             client = db.query(Client).filter(Client.id == d.client_id).first() if d.client_id else None
             deal_list.append({
-                "id": d.id, "client_name": client.name if client else "Unknown",
+                "id": d.id, "client_name": client.full_name if client else "Unknown",
                 "expected_premium": float(d.expected_premium) if d.expected_premium else 0,
                 "probability": float(d.probability) if d.probability else 0,
             })

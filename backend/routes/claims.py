@@ -1,6 +1,6 @@
 """Claims management module with full lifecycle: submit → verify → fraud check → assess → approve/reject → pay → close."""
 import random
-from datetime import datetime
+from datetime import datetime, date
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -84,8 +84,8 @@ class ClaimResponse(BaseModel):
     claim_type: str
     claim_amount: Decimal
     approved_amount: Optional[Decimal]
-    incident_date: str
-    incident_description: Optional[str]
+    incident_date: Optional[date] = None
+    incident_description: Optional[str] = None
     status: str
     fraud_flag: bool
     fraud_score: Optional[float]

@@ -80,10 +80,10 @@ class AuditLogResponse(BaseModel):
     id: str
     user_id: str
     action: str
-    entity_type: str
-    entity_id: str
-    details: Optional[dict]
-    ip_address: Optional[str]
+    entity_type: Optional[str] = None
+    entity_id: Optional[str] = None
+    details: Optional[dict] = None
+    ip_address: Optional[str] = None
     created_at: datetime
     user_name: Optional[str] = None
     model_config = {"from_attributes": True}
