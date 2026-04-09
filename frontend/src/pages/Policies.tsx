@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api, type Policy, type Client } from '../api'
-import { Plus, Search, X } from 'lucide-react'
+import { Plus, Search, X, Paperclip, ChevronDown, ChevronRight } from 'lucide-react'
+import DocumentManager from '../components/DocumentManager'
 
 const PRODUCTS = [
   'AIA Universal Life', 'AIA Short-term Endowment', 'AIA Health Shield',
@@ -22,6 +23,7 @@ export default function Policies() {
     premium_amount: '', sum_assured: '', premium_frequency: 'monthly', start_date: '', status: 'active',
   })
   const [saving, setSaving] = useState(false)
+  const [expandedPolicy, setExpandedPolicy] = useState<string | null>(null)
 
   const load = () => {
     Promise.all([api.getPolicies(), api.getClients()])
@@ -80,11 +82,13 @@ export default function Policies() {
       ) : (
         <table className="data-table">
           <thead>
-            <tr><th>Policy #</th><th>Client</th><th>Product</th><th>Premium</th><th>Frequency</th><th>Status</th><th>Start Date</th></tr>
+            <tr><th style={{ width: 30 }}></th><th>Policy #</th><th>Client</th><th>Product</th><th>Premium</th><th>Frequency</th><th>Status</th><th>Start Date</th><th style={{ width: 40 }}><Paperclip size={14} /></th></tr>
           </thead>
           <tbody>
             {filtered.map(p => (
-              <tr key={p.id}>
+              <>
+              <tr key={p.id} onClick={() => setExpandedPolicy(expandedPolicy === p.id ? null : p.id)} style={{ cursor: 'pointer' }}>
+                <td>{expandedPolicy === p.id ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</td>
                 <td style={{ fontWeight: 600, fontFamily: 'monospace' }}>{p.policy_number}</td>
                 <td>{p.client_name || '—'}</td>
                 <td>{p.product_name}</td>
@@ -92,7 +96,16 @@ export default function Policies() {
                 <td style={{ textTransform: 'capitalize' }}>{p.premium_frequency}</td>
                 <td><span className={`badge badge-${p.status === 'active' ? 'green' : p.status === 'pending' ? 'blue' : 'gray'}`}>{p.status}</span></td>
                 <td>{new Date(p.start_date).toLocaleDateString()}</td>
+                <td><Paperclip size={13} color="var(--text-dim)" /></td>
               </tr>
+              {expandedPolicy === p.id && (
+                <tr key={`${p.id}-docs`}>
+                  <td colSpan={9} style={{ padding: '12px 20px', background: 'var(--bg-elevated)' }}>
+                    <DocumentManager entityType="policy" entityId={p.id} />
+                  </td>
+                </tr>
+              )}
+              </>
             ))}
           </tbody>
         </table>

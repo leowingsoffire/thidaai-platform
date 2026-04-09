@@ -194,6 +194,13 @@ export interface Proposal {
   pdf_path: string | null; status: string; created_at: string;
 }
 
+export interface DocumentAttachment {
+  id: string; entity_type: string; entity_id: string;
+  file_name: string; original_name: string; file_size: number;
+  content_type: string; category: string; notes: string | null;
+  uploaded_by: string | null; created_at: string;
+}
+
 export interface MDRTProgress {
   id: string; year: number; target_premium: number; achieved_premium: number;
   target_cases: number; achieved_cases: number; progress_percentage: number;
@@ -396,4 +403,27 @@ export const api = {
   getUWAIAnalysis: (caseId: string) => request<any>(`/underwriting/${caseId}/ai-analysis`),
   aiGenerateContent: (data: { topic?: string; platform?: string; post_type?: string; language?: string; tone?: string }) =>
     request<any>('/content/ai-generate', { method: 'POST', body: JSON.stringify(data) }),
+
+  // Document Attachments
+  uploadDocument: (entityType: string, entityId: string, file: File, category?: string, notes?: string) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('entity_type', entityType);
+    formData.append('entity_id', entityId);
+    formData.append('category', category || 'other');
+    formData.append('notes', notes || '');
+    const token = getToken();
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return fetch(`${API_BASE}/documents`, { method: 'POST', headers, body: formData })
+      .then(async res => {
+        if (!res.ok) { const e = await res.json().catch(() => ({ detail: 'Upload failed' })); throw new Error(e.detail); }
+        return res.json() as Promise<DocumentAttachment>;
+      });
+  },
+  getDocuments: (entityType: string, entityId: string) =>
+    request<DocumentAttachment[]>(`/documents?entity_type=${entityType}&entity_id=${entityId}`),
+  deleteDocument: (docId: string) =>
+    request<void>(`/documents/${docId}`, { method: 'DELETE' }),
+  getDocumentDownloadUrl: (docId: string) => `${API_BASE}/documents/${docId}/download`,
 };

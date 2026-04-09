@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { api, Claim } from '../api'
+import { ChevronDown, ChevronRight, Paperclip } from 'lucide-react'
+import DocumentManager from '../components/DocumentManager'
 
 const STATUS_COLORS: Record<string, string> = {
   submitted: '#6b7280', docs_verification: '#f59e0b', fraud_check: '#ef4444',
@@ -14,6 +16,7 @@ export default function Claims() {
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState({ policy_id: '', claim_type: 'health', claim_amount: '', incident_date: '', incident_description: '' })
   const [stats, setStats] = useState<any>(null)
+  const [expandedClaim, setExpandedClaim] = useState<string | null>(null)
 
   useEffect(() => { loadAll() }, [filter])
 
@@ -105,11 +108,13 @@ export default function Claims() {
       <div className="table-container">
         <table>
           <thead>
-            <tr><th>Claim #</th><th>Client</th><th>Type</th><th>Amount</th><th>Fraud</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+            <tr><th style={{ width: 30 }}></th><th>Claim #</th><th>Client</th><th>Type</th><th>Amount</th><th>Fraud</th><th>Status</th><th>Date</th><th>Actions</th><th style={{ width: 40 }}><Paperclip size={14} /></th></tr>
           </thead>
           <tbody>
             {claims.map(c => (
-              <tr key={c.id}>
+              <>
+              <tr key={c.id} onClick={() => setExpandedClaim(expandedClaim === c.id ? null : c.id)} style={{ cursor: 'pointer' }}>
+                <td>{expandedClaim === c.id ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</td>
                 <td><strong>{c.claim_number}</strong></td>
                 <td>{c.client_name || '—'}</td>
                 <td>{c.claim_type}</td>
@@ -119,7 +124,7 @@ export default function Claims() {
                 </td>
                 <td><span className="badge" style={{ backgroundColor: STATUS_COLORS[c.status] || '#6b7280' }}>{c.status.replace(/_/g, ' ')}</span></td>
                 <td>{new Date(c.created_at).toLocaleDateString()}</td>
-                <td>
+                <td onClick={e => e.stopPropagation()}>
                   <div className="btn-group-sm">
                     {c.status === 'assessment' && <>
                       <button className="btn btn-sm btn-success" onClick={() => handleAction(c.id, 'approve')}>Approve</button>
@@ -129,9 +134,18 @@ export default function Claims() {
                     {c.status === 'approved' && <button className="btn btn-sm btn-primary" onClick={() => handleAction(c.id, 'payment_processing')}>Pay</button>}
                   </div>
                 </td>
+                <td><Paperclip size={13} color="var(--text-dim)" /></td>
               </tr>
+              {expandedClaim === c.id && (
+                <tr key={`${c.id}-docs`}>
+                  <td colSpan={10} style={{ padding: '12px 20px', background: 'var(--bg-elevated)' }}>
+                    <DocumentManager entityType="claim" entityId={c.id} />
+                  </td>
+                </tr>
+              )}
+              </>
             ))}
-            {claims.length === 0 && <tr><td colSpan={8} style={{ textAlign: 'center' }}>No claims found</td></tr>}
+            {claims.length === 0 && <tr><td colSpan={10} style={{ textAlign: 'center' }}>No claims found</td></tr>}
           </tbody>
         </table>
       </div>

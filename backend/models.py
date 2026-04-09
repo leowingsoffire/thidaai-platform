@@ -576,3 +576,27 @@ class AutoGreeting(Base):
     created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
 
     client = relationship("Client", backref="auto_greetings")
+
+
+# ============================================================
+# DOCUMENT ATTACHMENTS
+# ============================================================
+
+class DocumentAttachment(Base):
+    """File attachments linked to any entity (policy, claim, client, underwriting, corporate)."""
+    __tablename__ = "document_attachments"
+    __table_args__ = (Index("idx_doc_entity", "entity_type", "entity_id"),)
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    entity_type = Column(String(50), nullable=False)  # policy, claim, client, underwriting, corporate
+    entity_id = Column(String(36), nullable=False)
+    file_name = Column(String(500), nullable=False)
+    original_name = Column(String(500), nullable=False)
+    file_size = Column(Integer, default=0)  # bytes
+    content_type = Column(String(200), default="application/octet-stream")
+    category = Column(String(100))  # kyc, medical, financial, supporting, contract, proposal, photo, other
+    notes = Column(Text)
+    uploaded_by = Column(String(36), ForeignKey("users.id"))
+    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
+
+    uploader = relationship("User", foreign_keys=[uploaded_by])

@@ -21,6 +21,7 @@ from routes.corporate import router as corporate_router
 from routes.content import router as content_router
 from routes.content import seed_objections
 from routes.greetings import router as greetings_router
+from routes.documents import router as documents_router
 from services.workflow_service import seed_workflows
 from services.auth_service import hash_password
 from models import User
@@ -50,6 +51,10 @@ app.add_middleware(
 pdf_dir = os.path.join(os.path.dirname(__file__), "generated_pdfs")
 os.makedirs(pdf_dir, exist_ok=True)
 app.mount("/files", StaticFiles(directory=pdf_dir), name="files")
+
+# Mount uploads directory
+upload_dir = os.path.join(os.path.dirname(__file__), "uploads")
+os.makedirs(upload_dir, exist_ok=True)
 
 
 # ---- Startup: seed workflows & default admin ----
@@ -102,6 +107,7 @@ app.include_router(viber_router)
 app.include_router(corporate_router)
 app.include_router(content_router)
 app.include_router(greetings_router)
+app.include_router(documents_router)
 
 # CRM / existing modules
 app.include_router(dashboard.router)
