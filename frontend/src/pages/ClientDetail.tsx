@@ -41,7 +41,7 @@ export default function ClientDetail() {
         occupation: client.occupation || '', age: client.date_of_birth ? Math.floor((Date.now() - new Date(client.date_of_birth).getTime()) / 31557600000) : 30,
       })
       setAnalysis(result)
-    } catch { } finally { setAnalyzing(false) }
+    } catch (e) { console.error('Analysis failed:', e) } finally { setAnalyzing(false) }
   }
 
   const handleEdit = () => {

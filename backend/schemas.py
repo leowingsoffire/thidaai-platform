@@ -70,12 +70,11 @@ class PolicyResponse(PolicyBase):
 # --- Needs Analysis Schemas ---
 class NeedsAnalysisRequest(BaseModel):
     client_id: str
-    current_coverage: Decimal = Decimal("0")
-    annual_expenses: Decimal
-    outstanding_debts: Decimal = Decimal("0")
-    emergency_fund_months: int = 6
-    children_education_needed: bool = False
-    retirement_age: int = 60
+    monthly_income: Decimal = Decimal("0")
+    dependents: int = 0
+    marital_status: str = "single"
+    occupation: str = ""
+    age: int = 30
 
 
 class NeedsAnalysisResponse(BaseModel):
