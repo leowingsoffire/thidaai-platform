@@ -96,7 +96,7 @@ class ClaimResponse(BaseModel):
     assessment_notes: Optional[str]
     payment_method: Optional[str]
     payment_reference: Optional[str]
-    payment_date: Optional[str]
+    payment_date: Optional[date] = None
     workflow_instance_id: Optional[str]
     created_at: datetime
     updated_at: datetime
