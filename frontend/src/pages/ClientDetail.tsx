@@ -315,7 +315,7 @@ export default function ClientDetail() {
             <thead><tr><th>Policy #</th><th>Product</th><th>Premium</th><th>Sum Assured</th><th>Status</th><th>Start</th></tr></thead>
             <tbody>
               {policies.map(p => (
-                <tr key={p.id}>
+                <tr key={p.id} onClick={() => navigate('/policies')} style={{ cursor: 'pointer' }} title="Open Policies page">
                   <td style={{ fontWeight: 600 }}>{p.policy_number}</td>
                   <td>{p.product_name}</td>
                   <td>{fmt(p.premium_amount)} MMK</td>
@@ -337,7 +337,7 @@ export default function ClientDetail() {
             <thead><tr><th>Title</th><th>Status</th><th>Created</th></tr></thead>
             <tbody>
               {proposals.map(p => (
-                <tr key={p.id}>
+                <tr key={p.id} style={{ cursor: 'pointer' }}>
                   <td style={{ fontWeight: 600 }}>{p.title}</td>
                   <td><span className={`badge badge-${p.status === 'sent' ? 'green' : 'blue'}`}>{p.status}</span></td>
                   <td>{new Date(p.created_at).toLocaleDateString()}</td>

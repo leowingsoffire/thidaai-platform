@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api, type Activity, type Client } from '../api'
-import { Plus, Search, Check, X, Phone, HandshakeIcon, Presentation, UserPlus, ClipboardList } from 'lucide-react'
+import { Plus, Search, Check, X, Phone, HandshakeIcon, Presentation, UserPlus, ClipboardList, ChevronDown, ChevronRight } from 'lucide-react'
 
 const TYPES = [
   { value: 'call', label: 'Call', icon: '📞' },
@@ -21,6 +21,7 @@ export default function Activities() {
   const [showModal, setShowModal] = useState(false)
   const [form, setForm] = useState<any>({ client_id: '', activity_type: 'call', title: '', description: '', scheduled_date: '', status: 'planned' })
   const [saving, setSaving] = useState(false)
+  const [expandedActivity, setExpandedActivity] = useState<string | null>(null)
 
   const load = () => {
     const params: any = {}
@@ -64,19 +65,19 @@ export default function Activities() {
 
       {stats && (
         <div className="grid-4" style={{ marginBottom: 20 }}>
-          <div className="stat-card">
+          <div className="stat-card" onClick={() => { setFilterStatus(''); setFilterType('') }} style={{ cursor: 'pointer' }}>
             <div className="stat-header"><div className="stat-label">Today</div><div className="stat-icon blue"><ClipboardList size={18} /></div></div>
             <div className="stat-value">{stats.today}</div>
           </div>
-          <div className="stat-card">
+          <div className="stat-card" onClick={() => { setFilterStatus('completed'); setFilterType('') }} style={{ cursor: 'pointer' }}>
             <div className="stat-header"><div className="stat-label">This Week</div><div className="stat-icon green"><Check size={18} /></div></div>
             <div className="stat-value">{stats.week}</div>
           </div>
-          <div className="stat-card">
+          <div className="stat-card" onClick={() => { setFilterStatus(''); setFilterType('') }} style={{ cursor: 'pointer' }}>
             <div className="stat-header"><div className="stat-label">This Month</div><div className="stat-icon purple"><Presentation size={18} /></div></div>
             <div className="stat-value">{stats.month}</div>
           </div>
-          <div className="stat-card">
+          <div className="stat-card" onClick={() => { setFilterType('call'); setFilterStatus('') }} style={{ cursor: 'pointer' }}>
             <div className="stat-header"><div className="stat-label">Calls Made</div><div className="stat-icon orange"><Phone size={18} /></div></div>
             <div className="stat-value">{stats.by_type?.call || 0}</div>
           </div>
@@ -99,20 +100,26 @@ export default function Activities() {
       ) : (
         <div className="card">
           {activities.map(a => (
-            <div className="activity-item" key={a.id}>
+            <div className="activity-item" key={a.id}
+              onClick={() => setExpandedActivity(expandedActivity === a.id ? null : a.id)}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="activity-icon" style={{ background: a.status === 'completed' ? 'var(--green-50)' : 'var(--gray-100)', fontSize: 16 }}>
                 {TYPES.find(t => t.value === a.activity_type)?.icon || '📌'}
               </div>
               <div className="activity-content">
-                <div className="activity-title">{a.title}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <div className="activity-title">{a.title}</div>
+                  {expandedActivity === a.id ? <ChevronDown size={13} color="var(--gray-400)" /> : <ChevronRight size={13} color="var(--gray-400)" />}
+                </div>
                 <div className="activity-meta">
                   {a.client_name && <span>{a.client_name} · </span>}
                   <span style={{ textTransform: 'capitalize' }}>{a.activity_type}</span>
                   {a.scheduled_date && <span> · {new Date(a.scheduled_date).toLocaleDateString()}</span>}
                 </div>
-                {a.description && <div style={{ fontSize: 12, color: 'var(--gray-400)', marginTop: 3 }}>{a.description}</div>}
+                {expandedActivity === a.id && a.description && <div style={{ fontSize: 12, color: 'var(--gray-400)', marginTop: 6, lineHeight: 1.5 }}>{a.description}</div>}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }} onClick={e => e.stopPropagation()}>
                 <span className={`badge badge-${a.status === 'completed' ? 'green' : a.status === 'planned' ? 'blue' : 'gray'}`}>{a.status}</span>
                 {a.status === 'planned' && (
                   <button className="btn-success btn-sm" onClick={() => markComplete(a)} title="Mark completed"><Check size={14} /></button>

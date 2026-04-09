@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { api, AuditLogEntry } from '../api'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 
 export default function AuditLog() {
   const [logs, setLogs] = useState<AuditLogEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('')
+  const [expandedLog, setExpandedLog] = useState<string | null>(null)
 
   useEffect(() => { load() }, [filter])
 
@@ -37,19 +39,27 @@ export default function AuditLog() {
 
       <div className="table-container">
         <table>
-          <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Entity</th><th>ID</th><th>Details</th></tr></thead>
+          <thead><tr><th style={{ width: 30 }}></th><th>Time</th><th>User</th><th>Action</th><th>Entity</th><th>ID</th><th>Details</th></tr></thead>
           <tbody>
             {logs.map(l => (
-              <tr key={l.id}>
+              <>
+              <tr key={l.id} onClick={() => setExpandedLog(expandedLog === l.id ? null : l.id)} style={{ cursor: 'pointer' }}>
+                <td>{expandedLog === l.id ? <ChevronDown size={13} /> : <ChevronRight size={13} />}</td>
                 <td>{new Date(l.created_at).toLocaleString()}</td>
                 <td>{l.user_name || l.user_id?.substring(0, 8)}</td>
                 <td><span className="badge" style={{ backgroundColor: ACTION_COLORS[l.action] || '#6b7280' }}>{l.action}</span></td>
                 <td>{l.entity_type}</td>
                 <td><code>{l.entity_id?.substring(0, 12)}</code></td>
-                <td><pre style={{ fontSize: '11px', maxWidth: 300, overflow: 'auto', margin: 0 }}>{l.details ? JSON.stringify(l.details, null, 1) : '—'}</pre></td>
+                <td style={{ fontSize: 11, color: 'var(--gray-400)' }}>{l.details ? 'Click to expand' : '—'}</td>
               </tr>
+              {expandedLog === l.id && l.details && (
+                <tr><td colSpan={7} style={{ padding: '12px 16px', background: 'var(--bg-elevated)' }}>
+                  <pre style={{ fontSize: 12, margin: 0, whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>{JSON.stringify(l.details, null, 2)}</pre>
+                </td></tr>
+              )}
+              </>
             ))}
-            {logs.length === 0 && <tr><td colSpan={6} style={{ textAlign: 'center' }}>No audit logs</td></tr>}
+            {logs.length === 0 && <tr><td colSpan={7} style={{ textAlign: 'center' }}>No audit logs</td></tr>}
           </tbody>
         </table>
       </div>

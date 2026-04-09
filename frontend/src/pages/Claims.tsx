@@ -74,12 +74,12 @@ export default function Claims() {
 
       {stats && (
         <div className="stats-grid">
-          <div className="stat-card"><div className="stat-value">{stats.total}</div><div className="stat-label">Total Claims</div></div>
-          <div className="stat-card"><div className="stat-value">{stats.pending}</div><div className="stat-label">Pending</div></div>
-          <div className="stat-card"><div className="stat-value">{stats.approved}</div><div className="stat-label">Approved</div></div>
-          <div className="stat-card"><div className="stat-value">{stats.flagged}</div><div className="stat-label">Fraud Flagged</div></div>
-          <div className="stat-card"><div className="stat-value">{fmt(stats.total_claimed)} MMK</div><div className="stat-label">Total Claimed</div></div>
-          <div className="stat-card"><div className="stat-value">{fmt(stats.total_approved)} MMK</div><div className="stat-label">Total Approved</div></div>
+          <div className="stat-card" onClick={() => setFilter('')} style={{ cursor: 'pointer' }}><div className="stat-value">{stats.total}</div><div className="stat-label">Total Claims</div></div>
+          <div className="stat-card" onClick={() => setFilter('submitted')} style={{ cursor: 'pointer' }}><div className="stat-value">{stats.pending}</div><div className="stat-label">Pending</div></div>
+          <div className="stat-card" onClick={() => setFilter('approved')} style={{ cursor: 'pointer' }}><div className="stat-value">{stats.approved}</div><div className="stat-label">Approved</div></div>
+          <div className="stat-card" onClick={() => setFilter('')} style={{ cursor: 'pointer' }}><div className="stat-value">{stats.flagged}</div><div className="stat-label">Fraud Flagged</div></div>
+          <div className="stat-card" style={{ cursor: 'default' }}><div className="stat-value">{fmt(stats.total_claimed)} MMK</div><div className="stat-label">Total Claimed</div></div>
+          <div className="stat-card" style={{ cursor: 'default' }}><div className="stat-value">{fmt(stats.total_approved)} MMK</div><div className="stat-label">Total Approved</div></div>
         </div>
       )}
 

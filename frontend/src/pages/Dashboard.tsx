@@ -449,7 +449,7 @@ export default function Dashboard() {
               const Icon = REC_ICONS[rec.icon] || Lightbulb
               const pColor = rec.priority === 'high' ? '#dc2626' : rec.priority === 'medium' ? '#f59e0b' : '#10b981'
               return (
-                <div key={i} className="db-ai-item">
+                <div key={i} className="db-ai-item" onClick={() => navigate('/approvals')} style={{ cursor: 'pointer' }}>
                   <div className="db-ai-item-icon" style={{ background: `${pColor}15`, color: pColor }}>
                     <Icon size={18} />
                   </div>
@@ -492,7 +492,7 @@ export default function Dashboard() {
                 </thead>
                 <tbody>
                   {data.recent_activities.slice(0, 5).map(a => (
-                    <tr key={a.id}>
+                    <tr key={a.id} onClick={() => navigate('/activities')} style={{ cursor: 'pointer' }}>
                       <td>
                         <div className="db-tbl-cell">
                           <span className="db-tbl-icon">{ACTIVITY_ICONS[a.activity_type] || '📌'}</span>
@@ -519,14 +519,14 @@ export default function Dashboard() {
           <h3 className="db-card-title"><Star size={16} className="db-head-icon gold" /> Quick Metrics</h3>
           <div className="db-metrics-list">
             {[
-              { label: 'Avg Policy Premium', value: data.active_policies > 0 ? fmtK(Math.round(data.total_premium / data.active_policies)) : '0', unit: 'MMK', color: '#7c5cfc' },
-              { label: 'Monthly Revenue', value: fmtK(data.monthly_premium), unit: 'MMK', color: '#3b82f6' },
-              { label: 'Pending Payout', value: fmtK(data.pending_commission), unit: 'MMK', color: '#f59e0b' },
-              { label: 'New Clients', value: data.new_clients_month.toString(), unit: 'this month', color: '#ec4899' },
-              { label: 'New Policies', value: data.new_policies_month.toString(), unit: 'this month', color: '#10b981' },
-              { label: 'Pipeline Deals', value: data.pipeline_deals.toString(), unit: 'active', color: '#f97316' },
+              { label: 'Avg Policy Premium', value: data.active_policies > 0 ? fmtK(Math.round(data.total_premium / data.active_policies)) : '0', unit: 'MMK', color: '#7c5cfc', route: '/policies' },
+              { label: 'Monthly Revenue', value: fmtK(data.monthly_premium), unit: 'MMK', color: '#3b82f6', route: '/commissions' },
+              { label: 'Pending Payout', value: fmtK(data.pending_commission), unit: 'MMK', color: '#f59e0b', route: '/commissions' },
+              { label: 'New Clients', value: data.new_clients_month.toString(), unit: 'this month', color: '#ec4899', route: '/clients' },
+              { label: 'New Policies', value: data.new_policies_month.toString(), unit: 'this month', color: '#10b981', route: '/policies' },
+              { label: 'Pipeline Deals', value: data.pipeline_deals.toString(), unit: 'active', color: '#f97316', route: '/pipeline' },
             ].map((m, i) => (
-              <div key={i} className="db-metric-row">
+              <div key={i} className="db-metric-row" onClick={() => navigate(m.route)} style={{ cursor: 'pointer' }}>
                 <span className="db-metric-dot" style={{ background: m.color }} />
                 <span className="db-metric-label">{m.label}</span>
                 <span className="db-metric-val" style={{ color: m.color }}>{m.value}</span>
