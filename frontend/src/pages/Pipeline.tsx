@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api, type PipelineDeal, type Client } from '../api'
-import { Plus, X, Trash2 } from 'lucide-react'
+import { Plus, X, Trash2, ChevronDown, ChevronRight, Calendar, TrendingUp, User } from 'lucide-react'
 
 const STAGES = ['prospect', 'approach', 'fact_find', 'proposal', 'negotiation', 'closed_won', 'closed_lost']
 const STAGE_LABELS: Record<string, string> = {
@@ -27,6 +27,7 @@ export default function Pipeline() {
     client_id: '', product_name: '', expected_premium: '', stage: 'prospect', expected_close_date: '', notes: '',
   })
   const [saving, setSaving] = useState(false)
+  const [expandedDeal, setExpandedDeal] = useState<string | null>(null)
 
   const load = () => {
     Promise.all([api.getPipeline(), api.getClients(), api.getPipelineSummary()])
@@ -95,26 +96,42 @@ export default function Pipeline() {
                 <div style={{ padding: '20px 10px', textAlign: 'center', fontSize: 12, color: 'var(--gray-400)' }}>No deals</div>
               ) : (
                 stageDeals.map(deal => (
-                  <div className="pipeline-card" key={deal.id}>
-                    <div className="pipeline-card-title">{deal.product_name}</div>
-                    <div className="pipeline-card-client">{deal.client_name || 'Unknown'}</div>
+                  <div className="pipeline-card" key={deal.id}
+                    onClick={() => setExpandedDeal(expandedDeal === deal.id ? null : deal.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div className="pipeline-card-title">{deal.product_name}</div>
+                      {expandedDeal === deal.id ? <ChevronDown size={14} color="var(--gray-400)" /> : <ChevronRight size={14} color="var(--gray-400)" />}
+                    </div>
+                    <div className="pipeline-card-client"><User size={11} style={{ marginRight: 3, verticalAlign: '-1px' }} />{deal.client_name || 'Unknown'}</div>
                     <div className="pipeline-card-footer">
                       <span className="pipeline-card-amount">{fmt(deal.expected_premium)}</span>
-                      <span className="pipeline-card-prob">{Math.round(deal.probability * 100)}%</span>
+                      <span className="pipeline-card-prob"><TrendingUp size={10} style={{ marginRight: 2, verticalAlign: '-1px' }} />{Math.round(deal.probability * 100)}%</span>
                     </div>
                     {deal.expected_close_date && (
-                      <div style={{ fontSize: 11, color: 'var(--gray-400)', marginTop: 6 }}>Close: {new Date(deal.expected_close_date).toLocaleDateString()}</div>
+                      <div style={{ fontSize: 11, color: 'var(--gray-400)', marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <Calendar size={10} /> Close: {new Date(deal.expected_close_date).toLocaleDateString()}
+                      </div>
                     )}
-                    <div style={{ display: 'flex', gap: 4, marginTop: 8, flexWrap: 'wrap' }}>
-                      {STAGES.filter(s => s !== stage && s !== 'closed_lost').map(s => (
-                        <button key={s} className="btn-ghost btn-sm" style={{ fontSize: 10, padding: '2px 6px' }} onClick={() => moveStage(deal, s)}>
-                          → {STAGE_LABELS[s]}
-                        </button>
-                      ))}
-                      <button className="btn-ghost btn-sm" style={{ fontSize: 10, padding: '2px 6px', color: 'var(--aia-red)' }} onClick={() => handleDelete(deal.id)}>
-                        <Trash2 size={10} />
-                      </button>
-                    </div>
+                    {expandedDeal === deal.id && (
+                      <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--border-card)' }} onClick={e => e.stopPropagation()}>
+                        {deal.notes && <div style={{ fontSize: 11, color: 'var(--gray-400)', marginBottom: 8, lineHeight: 1.4 }}>{deal.notes}</div>}
+                        <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 6 }}>Move to stage:</div>
+                        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                          {STAGES.filter(s => s !== stage && s !== 'closed_lost').map(s => (
+                            <button key={s} className="btn-ghost btn-sm" style={{ fontSize: 10, padding: '2px 6px' }} onClick={() => moveStage(deal, s)}>
+                              → {STAGE_LABELS[s]}
+                            </button>
+                          ))}
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}>
+                          <button className="btn-ghost btn-sm" style={{ fontSize: 10, padding: '2px 6px', color: 'var(--aia-red)' }} onClick={() => handleDelete(deal.id)}>
+                            <Trash2 size={10} /> Remove
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))
               )}
