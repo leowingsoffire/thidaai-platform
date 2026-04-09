@@ -1,4 +1,6 @@
-const API_BASE = (import.meta.env.VITE_API_URL || 'https://thidaai-backend-production.up.railway.app/api').trim();
+const RAILWAY_API = 'https://thidaai-backend-production.up.railway.app/api';
+const envUrl = (import.meta.env.VITE_API_URL || '').trim();
+const API_BASE = envUrl && !envUrl.includes('onrender.com') ? envUrl : RAILWAY_API;
 
 function getToken(): string | null {
   return localStorage.getItem('token');
