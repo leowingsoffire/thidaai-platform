@@ -1,4 +1,3 @@
-from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
@@ -14,8 +13,8 @@ def list_clients(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
 
 
 @router.get("/{client_id}", response_model=ClientResponse)
-def get_client(client_id: UUID, db: Session = Depends(get_db)):
-    client = db.query(Client).filter(Client.id == client_id).first()
+def get_client(client_id: str, db: Session = Depends(get_db)):
+    client = db.query(Client).filter(Client.id == str(client_id)).first()
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
     return client
@@ -31,8 +30,8 @@ def create_client(data: ClientCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{client_id}", response_model=ClientResponse)
-def update_client(client_id: UUID, data: ClientUpdate, db: Session = Depends(get_db)):
-    client = db.query(Client).filter(Client.id == client_id).first()
+def update_client(client_id: str, data: ClientUpdate, db: Session = Depends(get_db)):
+    client = db.query(Client).filter(Client.id == str(client_id)).first()
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
     update_data = data.model_dump(exclude_unset=True)
@@ -44,8 +43,8 @@ def update_client(client_id: UUID, data: ClientUpdate, db: Session = Depends(get
 
 
 @router.delete("/{client_id}", status_code=204)
-def delete_client(client_id: UUID, db: Session = Depends(get_db)):
-    client = db.query(Client).filter(Client.id == client_id).first()
+def delete_client(client_id: str, db: Session = Depends(get_db)):
+    client = db.query(Client).filter(Client.id == str(client_id)).first()
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
     db.delete(client)
