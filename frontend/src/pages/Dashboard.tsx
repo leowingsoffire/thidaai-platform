@@ -7,6 +7,7 @@ import {
   Clock, Zap, Activity, ArrowUp, ArrowDown, Minus, Award,
   PieChart as PieChartIcon, Sparkles, Star, ChevronRight
 } from 'lucide-react'
+import FeatureGuide from '../components/FeatureGuide'
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip,
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
@@ -156,6 +157,22 @@ export default function Dashboard() {
           <p className="db-hero-sub">This is your Dashboard</p>
         </div>
         <div className="db-hero-right">
+          <FeatureGuide
+            title="Dashboard"
+            description="Your command center showing all key performance indicators. View revenue trends, pipeline analysis, MDRT progress, and AI-powered action recommendations."
+            steps={[
+              { text: 'Review the KPI cards at top — total clients, policies, premium, and commissions.' },
+              { text: 'Check the AI Recommendations section for suggested next actions.' },
+              { text: 'Use the revenue chart to compare monthly premium vs commission trends.' },
+              { text: 'Click any metric row (right panel) to navigate to its page.' },
+              { text: 'Click "Pending Approvals" to review AI-generated tasks.' },
+            ]}
+            tips={[
+              'Start every day here — the AI Recommendations tell you what to focus on.',
+              'The pipeline funnel shows where deals get stuck — focus on the narrowest stage.',
+            ]}
+            aiCommands={['dashboard', 'summary', "how's business", 'how many clients']}
+          />
           {(data.pending_approvals ?? 0) > 0 && (
             <button className="db-chip" onClick={() => navigate('/approvals')}>
               <Clock size={14} /> {data.pending_approvals} Pending Approvals

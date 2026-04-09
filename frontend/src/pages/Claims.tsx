@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { api, Claim } from '../api'
 import { ChevronDown, ChevronRight, Paperclip } from 'lucide-react'
 import DocumentManager from '../components/DocumentManager'
+import FeatureGuide from '../components/FeatureGuide'
 
 const STATUS_COLORS: Record<string, string> = {
   submitted: '#6b7280', docs_verification: '#f59e0b', fraud_check: '#ef4444',
@@ -58,7 +59,26 @@ export default function Claims() {
   return (
     <div className="page">
       <div className="page-header">
-        <h1>Claims Management</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1>Claims Management</h1>
+          <FeatureGuide
+            title="Claims"
+            description="End-to-end claim management with built-in fraud detection. Submit claims, track through verification and assessment, and process payments."
+            steps={[
+              { text: 'Click "+ New Claim" to submit a claim.' },
+              { text: 'Select the policy, choose claim type, enter amount and incident date.' },
+              { text: 'Submit — the system creates a workflow automatically.' },
+              { text: 'Claims go through: Docs Verification → Fraud Check → Assessment.' },
+              { text: 'At Assessment, approve (set amount) or reject (provide reason).' },
+              { text: 'Click any claim row to expand and see documents. Click stat cards to filter.' },
+            ]}
+            tips={[
+              'Upload supporting documents before Docs Verification to avoid delays.',
+              'Watch the fraud score — flagged claims need extra scrutiny.',
+            ]}
+            aiCommands={['submit claim', 'claim status', 'pending claims', 'approve claim']}
+          />
+        </div>
         <div className="header-actions">
           <select className="select" value={filter} onChange={e => setFilter(e.target.value)}>
             <option value="">All</option>

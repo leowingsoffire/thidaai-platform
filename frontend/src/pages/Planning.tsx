@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { api, type FinancialPlan } from '../api'
 import { Calculator, Umbrella, GraduationCap, Receipt, Heart, Shield, Wallet } from 'lucide-react'
+import FeatureGuide from '../components/FeatureGuide'
 
 const fmt = (n: number) => n.toLocaleString(undefined, { maximumFractionDigits: 0 })
 
@@ -36,8 +37,24 @@ export default function Planning() {
   return (
     <div>
       <div className="page-header">
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h1>Financial Planning</h1>
+          <FeatureGuide
+            title="Financial Planning"
+            description="Professional financial calculators for client consultations. Calculate retirement needs, education funding, tax optimization, and cash flow health."
+            steps={[
+              { text: 'Select a calculator tab: Retirement, Education, Tax, or Cash Flow.' },
+              { text: 'Enter the client\'s financial parameters.' },
+              { text: 'Click Calculate to see results and recommendations.' },
+              { text: 'Use results during client meetings to identify coverage gaps.' },
+              { text: 'Explore Corporate Solutions for group insurance options.' },
+            ]}
+            tips={[
+              'Run Cash Flow Health Score during meetings — it\'s a powerful visual tool.',
+              'Education Calculator shows real costs with inflation factored in.',
+            ]}
+            aiCommands={['retirement plan', 'education plan', 'cash flow health']}
+          />
           <p style={{ fontSize: 12, color: 'var(--gray-400)', marginTop: 2 }}>
             WorkWell with AIA · LIVE WELL · THINK WELL · FEEL WELL · PLAN WELL
           </p>

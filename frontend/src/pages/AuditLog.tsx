@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { api, AuditLogEntry } from '../api'
 import { ChevronDown, ChevronRight } from 'lucide-react'
+import FeatureGuide from '../components/FeatureGuide'
 
 export default function AuditLog() {
   const [logs, setLogs] = useState<AuditLogEntry[]>([])
@@ -25,7 +26,24 @@ export default function AuditLog() {
   return (
     <div className="page">
       <div className="page-header">
-        <h1>Audit Trail</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1>Audit Trail</h1>
+          <FeatureGuide
+            title="Audit Trail"
+            description="Complete audit logging for compliance. Every action (create, update, delete, approve, reject, escalate) is recorded with user, timestamp, and full details."
+            steps={[
+              { text: 'View the chronological list of all logged actions.' },
+              { text: 'Use the entity type dropdown to filter (e.g. only Claims).' },
+              { text: 'Click any row to expand and see the full JSON details.' },
+              { text: 'Use the color-coded action badges for quick scanning.' },
+              { text: 'Use for compliance reporting and action investigation.' },
+            ]}
+            tips={[
+              'Filter by entity type to quickly find relevant decisions.',
+              'The Audit Trail is read-only — entries cannot be modified.',
+            ]}
+          />
+        </div>
         <select className="select" value={filter} onChange={e => setFilter(e.target.value)}>
           <option value="">All Entities</option>
           <option value="policy">Policies</option>

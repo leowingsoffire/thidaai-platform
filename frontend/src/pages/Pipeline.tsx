@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api, type PipelineDeal, type Client } from '../api'
 import { Plus, X, Trash2, ChevronDown, ChevronRight, Calendar, TrendingUp, User } from 'lucide-react'
+import FeatureGuide from '../components/FeatureGuide'
 
 const STAGES = ['prospect', 'approach', 'fact_find', 'proposal', 'negotiation', 'closed_won', 'closed_lost']
 const STAGE_LABELS: Record<string, string> = {
@@ -70,8 +71,25 @@ export default function Pipeline() {
   return (
     <div>
       <div className="page-header">
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h1>Sales Pipeline</h1>
+          <FeatureGuide
+            title="Pipeline"
+            description="Track your sales deals through a visual kanban board. Create deals, move through stages, and monitor expected premiums and close probabilities."
+            steps={[
+              { text: 'Click "+ New Deal" to create a pipeline opportunity.' },
+              { text: 'Select client, product, set premium, probability, and close date.' },
+              { text: 'The deal appears in the selected stage column.' },
+              { text: 'Click any deal card to expand it and see stage transition buttons.' },
+              { text: 'Click a stage button (e.g. → Proposal) to move the deal forward.' },
+              { text: 'Track the summary bar for total deals and weighted pipeline value.' },
+            ]}
+            tips={[
+              'Keep probability % updated — it feeds into weighted pipeline value.',
+              'If a deal stalls, check AI Hub for objection handling scripts.',
+            ]}
+            aiCommands={['add deal', 'pipeline', 'pipeline insights']}
+          />
           {summary && <p style={{ fontSize: 12, color: 'var(--gray-400)', marginTop: 2 }}>{summary.total_deals} deals · {fmt(summary.total_value)} MMK total · {fmt(summary.weighted_value)} MMK weighted</p>}
         </div>
         <div className="page-header-actions">

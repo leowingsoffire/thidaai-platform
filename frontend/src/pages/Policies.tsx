@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { api, type Policy, type Client } from '../api'
 import { Plus, Search, X, Paperclip, ChevronDown, ChevronRight } from 'lucide-react'
 import DocumentManager from '../components/DocumentManager'
+import FeatureGuide from '../components/FeatureGuide'
 
 const PRODUCTS = [
   'AIA Universal Life', 'AIA Short-term Endowment', 'AIA Health Shield',
@@ -58,8 +59,25 @@ export default function Policies() {
   return (
     <div>
       <div className="page-header">
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h1>Policies</h1>
+          <FeatureGuide
+            title="Policies"
+            description="Create and manage insurance policies for all AIA product lines. Creating a policy auto-triggers an Underwriting workflow with SLA tracking."
+            steps={[
+              { text: 'Click "+ New Policy" to create a policy.' },
+              { text: 'Select the client, choose a product (e.g. AIA Health Shield), set premium and sum assured.' },
+              { text: 'Set the start date, payment frequency, and status.' },
+              { text: 'Submit — the system auto-creates an underwriting case.' },
+              { text: 'Use the status filter to find policies by status (active, lapsed, etc.).' },
+              { text: 'Click the paperclip icon to expand and attach documents.' },
+            ]}
+            tips={[
+              'Choose "Annual" payment for higher first-year commissions.',
+              'Use the status filter to spot lapsed policies for renewal outreach.',
+            ]}
+            aiCommands={['create policy', 'list policies', 'renew policy']}
+          />
           <p style={{ fontSize: 12, color: 'var(--gray-400)', marginTop: 2 }}>{activePolicies} active · {fmt(totalPremium)} MMK total premium</p>
         </div>
         <div className="page-header-actions">

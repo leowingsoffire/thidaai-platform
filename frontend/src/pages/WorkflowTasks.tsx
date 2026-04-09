@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api, WorkflowTask, WorkflowInstance } from '../api'
 import { ChevronDown, ChevronRight } from 'lucide-react'
+import FeatureGuide from '../components/FeatureGuide'
 
 const STATUS_COLORS: Record<string, string> = {
   pending: '#f59e0b', in_progress: '#3b82f6', completed: '#10b981', cancelled: '#6b7280',
@@ -36,7 +37,25 @@ export default function WorkflowTasks() {
   return (
     <div className="page">
       <div className="page-header">
-        <h1>Workflow Engine</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1>Workflow Engine</h1>
+          <FeatureGuide
+            title="Workflows"
+            description="Automated workflows for policies, claims, and underwriting. Each workflow has SLA timers, task assignments, and automatic escalation."
+            steps={[
+              { text: 'Toggle between "My Tasks" and "All Instances" views.' },
+              { text: 'In My Tasks, click cards to expand and see related entity link.' },
+              { text: 'Click the entity link button to navigate to Policies/Claims/Underwriting.' },
+              { text: 'In All Instances, click rows to navigate to the related entity page.' },
+              { text: 'Overdue tasks are highlighted and escalated to manager automatically.' },
+            ]}
+            tips={[
+              'Check My Tasks first thing every morning — overdue items escalate.',
+              'SLA timers are real — focus on items closest to their deadline.',
+            ]}
+            aiCommands={['workflow status', 'my tasks', 'pending tasks']}
+          />
+        </div>
         <div className="btn-group">
           <button className={`btn ${view === 'tasks' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setView('tasks')}>My Tasks ({tasks.length})</button>
           <button className={`btn ${view === 'instances' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setView('instances')}>All Instances ({instances.length})</button>

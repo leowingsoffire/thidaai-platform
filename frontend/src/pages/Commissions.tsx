@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api, type Commission } from '../api'
 import { DollarSign, TrendingUp, Clock, Layers, ChevronDown, ChevronRight } from 'lucide-react'
+import FeatureGuide from '../components/FeatureGuide'
 
 const fmt = (n: number) => n.toLocaleString(undefined, { maximumFractionDigits: 0 })
 
@@ -23,7 +24,25 @@ export default function Commissions() {
   return (
     <div>
       <div className="page-header">
-        <h1>Commissions</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1>Commissions</h1>
+          <FeatureGuide
+            title="Commissions"
+            description="Complete commission tracking across all policies. View total earned, pending, and paid commissions by type (First Year, Renewal, Bonus, Override)."
+            steps={[
+              { text: 'Review the summary cards for total earnings overview.' },
+              { text: 'Click stat cards to filter by commission status.' },
+              { text: 'Use the dropdown filter to see earned, pending, or paid.' },
+              { text: 'Click any commission row to expand and see full details.' },
+              { text: 'Check MDRT Tracker — commissions feed into qualification targets.' },
+            ]}
+            tips={[
+              'First-year commissions are highest — focus on new policy sales.',
+              'Your commission data feeds directly into the MDRT Tracker.',
+            ]}
+            aiCommands={['commissions', 'earnings', 'how much earned']}
+          />
+        </div>
       </div>
 
       {summary && (

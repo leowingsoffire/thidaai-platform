@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import FeatureGuide from '../components/FeatureGuide'
 import { api, type Client } from '../api'
 import { Plus, Search, Phone, Mail, X } from 'lucide-react'
 
@@ -46,7 +47,26 @@ export default function Clients() {
   return (
     <div>
       <div className="page-header">
-        <h1>Clients</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1>Clients</h1>
+          <FeatureGuide
+            title="Clients"
+            description="Manage your complete client database. Add new clients, search by name/phone/email, and click any row to see their profile with 4 Pillars assessment and AI analysis."
+            steps={[
+              { text: 'Click "+ Add Client" to register a new client with full demographics.' },
+              { text: 'Use the search bar to find clients by name, phone, or email.' },
+              { text: 'Click any client row to open their detail profile page.' },
+              { text: 'On the detail page, view the 4 Pillars coverage analysis.' },
+              { text: 'Click "AI Needs Analysis" to generate personalized recommendations.' },
+              { text: 'Use the Greetings tab to send birthday or anniversary messages.' },
+            ]}
+            tips={[
+              'Always fill in monthly income — it feeds into risk scoring and needs analysis.',
+              'The search bar searches across name, phone, and email simultaneously.',
+            ]}
+            aiCommands={['add client', 'find client Thida', 'list clients']}
+          />
+        </div>
         <div className="page-header-actions">
           <button className="btn-primary" onClick={() => setShowModal(true)}><Plus size={15} /> Add Client</button>
         </div>

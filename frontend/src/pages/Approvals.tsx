@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { CheckCircle2, XCircle, Clock, AlertTriangle, Filter, RefreshCw } from 'lucide-react'
 import { api, ApprovalItem } from '../api'
+import FeatureGuide from '../components/FeatureGuide'
 
 export default function Approvals() {
   const [approvals, setApprovals] = useState<ApprovalItem[]>([])
@@ -60,8 +61,24 @@ export default function Approvals() {
   return (
     <div className="page">
       <div className="page-header">
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h1>Approval Queue</h1>
+          <FeatureGuide
+            title="Approvals"
+            description="Review AI-generated actions with confidence scores. When the AI Assistant performs write operations, it queues approval requests here."
+            steps={[
+              { text: 'Use the AI Assistant chat to perform an action (e.g. "add client John").' },
+              { text: 'If the action requires approval, it appears here.' },
+              { text: 'Review the confidence score and action description.' },
+              { text: 'Click Approve (green) to execute, or Reject (red) to decline.' },
+              { text: 'Check Approved/Rejected tabs to see completed decisions.' },
+            ]}
+            tips={[
+              'Green confidence bars (>85%) are generally safe to approve.',
+              'Expired approvals need to be re-submitted through the AI Assistant.',
+            ]}
+            aiCommands={['approval queue', 'approvals', 'approve', 'reject']}
+          />
           <p>AI-generated actions awaiting your approval</p>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>

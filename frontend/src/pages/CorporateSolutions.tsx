@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { api, type CorporateProfile, type Client } from '../api'
 import { Building2, Users, Calculator, BarChart3, Shield, CheckCircle, AlertTriangle, TrendingUp, Paperclip } from 'lucide-react'
 import DocumentManager from '../components/DocumentManager'
+import FeatureGuide from '../components/FeatureGuide'
 
 const INDUSTRIES = [
   'technology','finance','manufacturing','construction','healthcare',
@@ -71,8 +72,24 @@ export default function CorporateSolutions() {
   return (
     <div>
       <div className="page-header">
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h1><Building2 size={24} style={{ verticalAlign: 'middle', marginRight: 8 }} />Corporate Solutions</h1>
+          <FeatureGuide
+            title="Corporate Solutions"
+            description="Manage corporate clients for group insurance. Create company profiles, calculate group premiums, and compare benefits packages."
+            steps={[
+              { text: 'Click "+ New Profile" to create a company profile.' },
+              { text: 'Enter company details: name, industry, employee count, avg age, revenue.' },
+              { text: 'Use the Group Calculator tab to estimate group insurance premiums.' },
+              { text: 'Use Benefits Comparison to show potential savings to corporate clients.' },
+              { text: 'Upload proposals using the document manager on each profile.' },
+            ]}
+            tips={[
+              'Benefits Comparison is your best sales tool — show savings side by side.',
+              'Combine with Financial Planning tools for comprehensive presentations.',
+            ]}
+            aiCommands={['corporate insurance', 'group benefits', 'employee benefits']}
+          />
           <p style={{ color: 'var(--gray-400)', fontSize: 13, marginTop: 2 }}>Group insurance, company analysis & HR benefits</p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api, type Activity, type Client } from '../api'
 import { Plus, Search, Check, X, Phone, HandshakeIcon, Presentation, UserPlus, ClipboardList, ChevronDown, ChevronRight } from 'lucide-react'
+import FeatureGuide from '../components/FeatureGuide'
 
 const TYPES = [
   { value: 'call', label: 'Call', icon: '📞' },
@@ -57,7 +58,26 @@ export default function Activities() {
   return (
     <div>
       <div className="page-header">
-        <h1>Activities</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1>Activities</h1>
+          <FeatureGuide
+            title="Activities"
+            description="Track all client interactions — calls, meetings, follow-ups, presentations, and referrals. View daily, weekly, and monthly activity statistics."
+            steps={[
+              { text: 'Click "+ Log Activity" to create a new entry.' },
+              { text: 'Select type (call, meeting, follow-up), optionally link to a client.' },
+              { text: 'Add title, description, and scheduled date.' },
+              { text: 'Click any activity item to expand and see full description.' },
+              { text: 'Click "✓" button to mark planned activities as complete.' },
+              { text: 'Click stat cards to filter by type or status.' },
+            ]}
+            tips={[
+              'Log every interaction — activity count contributes to MDRT benchmarking.',
+              'Link activities to clients so they appear on their profile history.',
+            ]}
+            aiCommands={['schedule meeting', 'book call', 'today agenda', "what's planned"]}
+          />
+        </div>
         <div className="page-header-actions">
           <button className="btn-primary" onClick={() => setShowModal(true)}><Plus size={15} /> Log Activity</button>
         </div>

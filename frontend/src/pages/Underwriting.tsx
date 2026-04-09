@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { api, UnderwritingCase } from '../api'
 import { ChevronDown, ChevronRight, Paperclip } from 'lucide-react'
 import DocumentManager from '../components/DocumentManager'
+import FeatureGuide from '../components/FeatureGuide'
 
 const RISK_COLORS: Record<string, string> = { preferred: '#10b981', standard: '#3b82f6', substandard: '#f59e0b', declined: '#ef4444' }
 
@@ -32,7 +33,25 @@ export default function Underwriting() {
   return (
     <div className="page">
       <div className="page-header">
-        <h1>Underwriting</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1>Underwriting</h1>
+          <FeatureGuide
+            title="Underwriting"
+            description="Risk assessment engine that auto-scores cases based on client age, occupation, sum assured, and policy type. Make approve, loading, or decline decisions."
+            steps={[
+              { text: 'When a policy is created, an underwriting case is auto-generated.' },
+              { text: 'Review the auto-assessed risk score and category.' },
+              { text: 'Click a case row to view full details and AI risk analysis.' },
+              { text: 'Make a decision: Approve, Approve with Loading (25%), or Decline.' },
+              { text: 'Add decision notes — they appear in the Audit Trail.' },
+            ]}
+            tips={[
+              'Risk ≤5 = Preferred (auto-approve). Score >15 = likely decline.',
+              'Use "Approve with Loading" for substandard risk rather than declining.',
+            ]}
+            aiCommands={['underwriting status', 'risk assessment', 'pending reviews']}
+          />
+        </div>
         <select className="select" value={filter} onChange={e => setFilter(e.target.value)}>
           <option value="">All Status</option>
           <option value="pending">Pending</option>

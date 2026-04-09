@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api, type MDRTProgress } from '../api'
 import { Target, Award, TrendingUp, Star, BarChart3, Users, Calendar } from 'lucide-react'
+import FeatureGuide from '../components/FeatureGuide'
 
 const fmt = (n: number) => n.toLocaleString(undefined, { maximumFractionDigits: 0 })
 const currentYear = new Date().getFullYear()
@@ -70,8 +71,24 @@ export default function MDRTTracker() {
   return (
     <div>
       <div className="page-header">
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h1><Target size={22} style={{ marginRight: 8, verticalAlign: 'middle', color: 'var(--aia-gold)' }} />MDRT Intelligence</h1>
+          <FeatureGuide
+            title="MDRT Tracker"
+            description="Track your progress toward MDRT qualification. Set premium and case targets, compare against peers, and see income projections."
+            steps={[
+              { text: 'Set your target premium and case count in Settings (Progress tab).' },
+              { text: 'View real-time progress bars for premium and case count vs targets.' },
+              { text: 'Check Performance Analytics for monthly trends and projections.' },
+              { text: 'Review Peer Benchmarking to see how you rank against colleagues.' },
+              { text: 'Use Income Projection for conservative/target/stretch scenarios.' },
+            ]}
+            tips={[
+              'Check "Required per remaining month" to know your monthly target.',
+              'Use Peer Benchmarking to motivate yourself against top performers.',
+            ]}
+            aiCommands={['MDRT', 'MDRT progress', 'qualification status']}
+          />
           <p style={{ fontSize: 12, color: 'var(--gray-400)', marginTop: 2 }}>Million Dollar Round Table · Thida Soe · MDRT 2023–2027</p>
         </div>
       </div>

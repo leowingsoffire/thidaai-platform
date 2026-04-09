@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { api, type Client, type Policy, type NeedsAnalysis, type Proposal, type AutoGreetingItem } from '../api'
 import { ArrowLeft, ShieldCheck, Brain, FileText, Edit2, Trash2, X, Phone, Mail, MapPin, Heart, Home, Lightbulb, Smile, Target, AlertTriangle, Gift, Send } from 'lucide-react'
 import DocumentManager from '../components/DocumentManager'
+import FeatureGuide from '../components/FeatureGuide'
 
 export default function ClientDetail() {
   const { id } = useParams<{ id: string }>()
@@ -128,7 +129,26 @@ export default function ClientDetail() {
       <div className="card" style={{ marginBottom: 20 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 6 }}>{client.full_name}</h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 0 }}>{client.full_name}</h1>
+              <FeatureGuide
+                title="Client Detail"
+                description="Complete client profile with 4 Pillars assessment, AI needs analysis, policies, proposals, greetings, and document management."
+                steps={[
+                  { text: 'Review the 4 Pillars coverage — green = covered, red = gap.' },
+                  { text: 'Click "Run Analysis" for AI-powered product recommendations.' },
+                  { text: 'Switch to Policies tab to see all linked policies.' },
+                  { text: 'Use Greetings tab to send birthday/anniversary messages.' },
+                  { text: 'Use Documents tab to upload and manage client files.' },
+                  { text: 'Click Edit (pencil icon) to update client information.' },
+                ]}
+                tips={[
+                  'AI Needs Analysis works best when all client fields are filled in.',
+                  'Check renewal alerts at the top for policies expiring within 60 days.',
+                ]}
+                aiCommands={['needs analysis', 'client profile', 'send greeting']}
+              />
+            </div>
             <div style={{ display: 'flex', gap: 16, fontSize: 13, color: 'var(--gray-500)', flexWrap: 'wrap' }}>
               {client.phone && <span><Phone size={13} style={{ marginRight: 4, verticalAlign: 'middle' }} />{client.phone}</span>}
               {client.email && <span><Mail size={13} style={{ marginRight: 4, verticalAlign: 'middle' }} />{client.email}</span>}

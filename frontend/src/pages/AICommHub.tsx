@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api, type ContentPost, type ObjectionScript, type AutoGreetingItem, type UpcomingEvent } from '../api'
 import { MessageSquare, Calendar, BookOpen, Gift, Send, Plus, Star, Globe, Heart, ChevronDown, ChevronUp, Smartphone } from 'lucide-react'
+import FeatureGuide from '../components/FeatureGuide'
 
 const PLATFORMS = ['facebook','viber','telegram','linkedin','instagram']
 const POST_TYPES = ['educational','testimonial','product','motivational','event']
@@ -84,8 +85,25 @@ export default function AICommHub() {
   return (
     <div>
       <div className="page-header">
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h1><MessageSquare size={24} style={{ verticalAlign: 'middle', marginRight: 8 }} />AI Communication Hub</h1>
+          <FeatureGuide
+            title="AI Communication Hub"
+            description="Your AI-powered communication toolkit. Create social media posts, browse objection handling scripts, and send auto-greetings to clients."
+            steps={[
+              { text: 'Content Calendar: Click "+ Create Post" to draft social content.' },
+              { text: 'Choose a template or write custom content with hashtags.' },
+              { text: 'Objection Scripts: Browse by category to prepare for client objections.' },
+              { text: 'Auto-Greetings: See upcoming birthdays and send greetings.' },
+              { text: 'Select channel (Viber, Telegram, SMS, WhatsApp) and click Send.' },
+            ]}
+            tips={[
+              'Schedule content posts in advance — batch your social media work.',
+              'Read objection scripts BEFORE client meetings for common pushback.',
+              'Birthday greetings via Viber/Telegram have highest open rates.',
+            ]}
+            aiCommands={['generate content', 'create post', 'objection handling', 'greetings']}
+          />
           <p style={{ color: 'var(--gray-400)', fontSize: 13, marginTop: 2 }}>Content calendar, objection handling & auto-greetings</p>
         </div>
       </div>
