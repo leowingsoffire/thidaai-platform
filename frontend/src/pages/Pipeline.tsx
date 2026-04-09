@@ -25,7 +25,7 @@ export default function Pipeline() {
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [form, setForm] = useState<any>({
-    client_id: '', product_name: '', expected_premium: '', stage: 'prospect', expected_close_date: '', notes: '',
+    client_id: '', product_name: '', expected_premium: '', stage: 'prospect', probability: 50, expected_close_date: '', notes: '',
   })
   const [saving, setSaving] = useState(false)
   const [expandedDeal, setExpandedDeal] = useState<string | null>(null)
@@ -38,8 +38,10 @@ export default function Pipeline() {
   useEffect(load, [])
 
   const moveStage = async (deal: PipelineDeal, newStage: string) => {
-    await api.updateDeal(deal.id, { stage: newStage })
-    load()
+    try {
+      await api.updateDeal(deal.id, { stage: newStage })
+      load()
+    } catch (e) { console.error('Move stage failed:', e) }
   }
 
   const handleSave = async () => {
@@ -48,20 +50,23 @@ export default function Pipeline() {
       const payload = {
         ...form,
         expected_premium: Number(form.expected_premium),
+        probability: Number(form.probability),
         expected_close_date: form.expected_close_date || null,
         notes: form.notes || null,
       }
       await api.createDeal(payload)
       setShowModal(false)
-      setForm({ client_id: '', product_name: '', expected_premium: '', stage: 'prospect', expected_close_date: '', notes: '' })
+      setForm({ client_id: '', product_name: '', expected_premium: '', stage: 'prospect', probability: 50, expected_close_date: '', notes: '' })
       load()
     } catch { } finally { setSaving(false) }
   }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Remove this deal?')) return
-    await api.deleteDeal(id)
-    load()
+    try {
+      await api.deleteDeal(id)
+      load()
+    } catch (e) { console.error('Delete failed:', e) }
   }
 
   const activeStages = STAGES.filter(s => s !== 'closed_lost')
@@ -125,7 +130,7 @@ export default function Pipeline() {
                     <div className="pipeline-card-client"><User size={11} style={{ marginRight: 3, verticalAlign: '-1px' }} />{deal.client_name || 'Unknown'}</div>
                     <div className="pipeline-card-footer">
                       <span className="pipeline-card-amount">{fmt(deal.expected_premium)}</span>
-                      <span className="pipeline-card-prob"><TrendingUp size={10} style={{ marginRight: 2, verticalAlign: '-1px' }} />{Math.round(deal.probability * 100)}%</span>
+                      <span className="pipeline-card-prob"><TrendingUp size={10} style={{ marginRight: 2, verticalAlign: '-1px' }} />{deal.probability}%</span>
                     </div>
                     {deal.expected_close_date && (
                       <div style={{ fontSize: 11, color: 'var(--gray-400)', marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -183,6 +188,9 @@ export default function Pipeline() {
             </div>
             <div className="form-row">
               <div className="form-group"><label>Expected Premium (MMK) *</label><input type="number" value={form.expected_premium} onChange={e => setForm({ ...form, expected_premium: e.target.value })} /></div>
+              <div className="form-group"><label>Probability (%)</label><input type="number" min="0" max="100" value={form.probability} onChange={e => setForm({ ...form, probability: e.target.value })} /></div>
+            </div>
+            <div className="form-row">
               <div className="form-group">
                 <label>Stage</label>
                 <select value={form.stage} onChange={e => setForm({ ...form, stage: e.target.value })}>
