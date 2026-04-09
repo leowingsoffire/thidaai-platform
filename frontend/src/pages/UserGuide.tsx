@@ -5,7 +5,8 @@ import {
   CheckSquare, CalendarCheck, DollarSign, Target, Calculator, Building2,
   MessageSquare, ClipboardList, GitBranch, Bot, ChevronRight, ChevronDown,
   ArrowRight, Sparkles, Search, ExternalLink, Zap, HelpCircle, Star,
-  Shield, Play, Info, Link2, Eye,
+  Shield, Play, Info, Link2, Eye, LogIn, Lightbulb, Rocket, Map,
+  MousePointerClick, ArrowRightCircle,
 } from 'lucide-react'
 
 /* ─── types ─── */
@@ -85,6 +86,71 @@ const FAQS: FAQ[] = [
   },
 ]
 
+/* ─── End-to-End Journeys ─── */
+interface JourneyStep { title: string; desc: string; page?: string; route?: string }
+interface Journey { title: string; subtitle: string; icon: any; color: string; steps: JourneyStep[]; tip?: string }
+
+const JOURNEYS: Journey[] = [
+  {
+    title: 'Journey 1: Onboard a New Client & Sell a Policy',
+    subtitle: 'The most common workflow — from first contact to active coverage',
+    icon: Users, color: '#8b5cf6',
+    steps: [
+      { title: 'Register the Client', desc: 'Go to Clients → click "+ Add Client" → enter name, phone, email, DOB, occupation, monthly income → Submit.', page: 'Clients Page', route: '/clients' },
+      { title: 'View Client Profile & Run Needs Analysis', desc: 'Click the client row to open their detail page. Review the 4 Pillars assessment (Live Well, Think Well, Feel Well, Plan Well). Click "AI Needs Analysis" for personalized product recommendations.', page: 'Client Detail', route: '/clients' },
+      { title: 'Create a Pipeline Deal', desc: 'Go to Pipeline → "+ New Deal" → select the client, choose a product, set expected premium & probability → Submit. The deal starts in "Prospect" stage.', page: 'Pipeline Page', route: '/pipeline' },
+      { title: 'Move the Deal Through Stages', desc: 'As you progress with the client, click stage buttons on the deal card: Prospect → Approach → Fact Find → Proposal → Negotiation → Closed Won.', page: 'Pipeline Page', route: '/pipeline' },
+      { title: 'Create the Policy', desc: 'Once the deal is closed, go to Policies → "+ New Policy" → select client, product (e.g. AIA Health Shield), premium, sum assured, payment frequency → Submit.', page: 'Policies Page', route: '/policies' },
+      { title: 'Underwriting Review', desc: 'The system auto-creates an underwriting case. Go to Underwriting to check the risk score. The engine auto-assesses: Preferred (≤5), Standard (≤10), Substandard (≤15), or Declined (>15).', page: 'Underwriting Page', route: '/underwriting' },
+      { title: 'Log the Activity', desc: 'Go to Activities → "+ Log Activity" to record the client meeting/call that resulted in the sale. This helps track your productivity.', page: 'Activities Page', route: '/activities' },
+      { title: 'Check Your Commission', desc: 'Go to Commissions to see the first-year commission created for this policy. Check MDRT Tracker to see how the new premium contributes to your qualification target.', page: 'Commissions → MDRT', route: '/commissions' },
+    ],
+    tip: 'Pro Tip: You can also do this entire flow using the AI Assistant — just type "add client Thida Win" then "create policy for Thida" and the AI handles the rest (with approval required).',
+  },
+  {
+    title: 'Journey 2: Process a Claim End-to-End',
+    subtitle: 'From claim submission through fraud check to payment',
+    icon: AlertTriangle, color: '#ef4444',
+    steps: [
+      { title: 'Submit the Claim', desc: 'Go to Claims → "New Claim" → select the policy, choose claim type (Health, Death, Disability, Accident, Maturity, Surrender), enter claimed amount & incident date → Submit.', page: 'Claims Page', route: '/claims' },
+      { title: 'Document Verification', desc: 'The claim workflow auto-starts. First stage: Docs Verification. Upload supporting documents using the expandable document panel on the claim row.', page: 'Claims Page', route: '/claims' },
+      { title: 'Fraud Check (Automatic)', desc: 'The system runs auto-fraud detection. A fraud score is computed. Claims with high scores get flagged for manual review. Check the fraud flag indicator.', page: 'Claims Page', route: '/claims' },
+      { title: 'Assessment & Decision', desc: 'At the Assessment stage, review all evidence. Click "Approve" (set approved amount) or "Reject" (with reason). Approved claims move to Payment Processing.', page: 'Claims Page', route: '/claims' },
+      { title: 'Payment & Closure', desc: 'Approved claims go through Payment Processing → Closed. The full lifecycle is tracked in Workflows.', page: 'Workflows Page', route: '/workflows' },
+      { title: 'Audit Trail', desc: 'Every decision (approve, reject, fraud flag) is logged. Go to Audit Trail and filter by "Claims" to see the complete history.', page: 'Audit Trail', route: '/audit' },
+    ],
+    tip: 'Pro Tip: Claims with fraud scores above threshold are automatically flagged. Always check the fraud indicator before approving large claims.',
+  },
+  {
+    title: 'Journey 3: Daily Agent Workflow',
+    subtitle: 'What to check every day to stay on top of your work',
+    icon: CalendarCheck, color: '#f97316',
+    steps: [
+      { title: 'Start with the Dashboard', desc: 'Login and review your KPI cards — total clients, policies, premium, commissions. Check the AI Recommendations section for suggested next actions.', page: 'Dashboard', route: '/' },
+      { title: 'Check Your Workflow Tasks', desc: 'Go to Workflows → "My Tasks" tab to see all tasks assigned to you. Focus on overdue items first (highlighted in red). Complete or transition pending tasks.', page: 'Workflows Page', route: '/workflows' },
+      { title: 'Review Pending Approvals', desc: 'Visit Approvals to review any AI-generated actions waiting for your decision. Check the confidence score before approving.', page: 'Approvals Page', route: '/approvals' },
+      { title: 'Review Pipeline Deals', desc: 'Check your Pipeline — any deals that need follow-up today? Move deals to the next stage as conversations progress.', page: 'Pipeline Page', route: '/pipeline' },
+      { title: 'Log Your Activities', desc: 'Record all client calls, meetings, and follow-ups in Activities. This tracks your productivity and helps with MDRT benchmarking.', page: 'Activities Page', route: '/activities' },
+      { title: 'Send Client Greetings', desc: 'Check AI Hub → Auto-Greetings tab for upcoming birthdays/anniversaries. Send personalized greetings via Viber, Telegram, SMS, or WhatsApp.', page: 'AI Hub', route: '/ai-hub' },
+      { title: 'Review MDRT Progress', desc: 'End your day on MDRT Tracker to see how you\'re progressing toward your qualification targets and compare against peers.', page: 'MDRT Tracker', route: '/mdrt' },
+    ],
+    tip: 'Pro Tip: Use the AI Assistant shortcut — type "what\'s planned" to see your daily agenda, or "how\'s business" for a quick dashboard summary.',
+  },
+  {
+    title: 'Journey 4: Corporate Client Proposal',
+    subtitle: 'Group insurance quotation for a company',
+    icon: Building2, color: '#64748b',
+    steps: [
+      { title: 'Create Company Profile', desc: 'Go to Corporate Solutions → "+ New Profile" → enter company name, industry, employee count, average age, revenue, HR contact.', page: 'Corporate Page', route: '/corporate' },
+      { title: 'Review Risk Assessment', desc: 'The system auto-generates a risk assessment based on industry and employee demographics. Review the risk rating.', page: 'Corporate Page', route: '/corporate' },
+      { title: 'Calculate Group Premium', desc: 'Switch to the "Group Calculator" tab → enter employee count, average age, plan type (Basic/Standard/Premium/Enterprise), coverage level → get premium estimate.', page: 'Corporate Page', route: '/corporate' },
+      { title: 'Compare Benefits', desc: 'Use the "Benefits Comparison" tab to show the client their existing benefits vs. your proposed AIA benefits with cost analysis.', page: 'Corporate Page', route: '/corporate' },
+      { title: 'Use Financial Planning Tools', desc: 'Complement your proposal with Planning tools — show Retirement, Education, or Cash Flow projections relevant to group benefits.', page: 'Planning Page', route: '/planning' },
+    ],
+    tip: 'Pro Tip: Upload proposal documents directly to the company profile using the document manager panel.',
+  },
+]
+
 /* ─── styles ─── */
 const linkChip = (color: string): React.CSSProperties => ({
   display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600,
@@ -105,6 +171,7 @@ export default function UserGuide() {
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const [activeSection, setActiveSection] = useState<string | null>(null)
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
+  const [activeJourney, setActiveJourney] = useState<number | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
 
   const filteredSections = SECTIONS.filter(s =>
@@ -161,6 +228,132 @@ export default function UserGuide() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* ═══ GETTING STARTED — First-time User Guide ═══ */}
+      <div style={{
+        background: 'var(--bg-card)', border: '2px solid #22c55e40',
+        borderRadius: 16, padding: '24px 28px', marginBottom: 28,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 10, background: '#22c55e18', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Rocket size={22} color="#22c55e" />
+          </div>
+          <div>
+            <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--text-primary)' }}>Getting Started — Where to Begin</h2>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--text-dim)' }}>Follow these steps if you're using the app for the first time</p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {[
+            { step: '1', title: 'Log In to Your Account', desc: 'Use your credentials to sign in. Admin: tdadmin / admin123 · Agent: tdagent / agent123. Click "Sign In" on the Login page.', route: '/login', icon: LogIn, color: '#6366f1' },
+            { step: '2', title: 'Explore the Dashboard', desc: 'After login you land on the Dashboard — your command center. Review KPI cards (clients, policies, premium, commissions) and AI Recommendations.', route: '/', icon: BarChart3, color: '#8b5cf6' },
+            { step: '3', title: 'Add Your First Client', desc: 'Go to Clients → click "+ Add Client" → fill name, phone, email, DOB, occupation, income → Submit. This is the foundation for everything.', route: '/clients', icon: Users, color: '#0ea5e9' },
+            { step: '4', title: 'Create a Policy for the Client', desc: 'Go to Policies → "+ New Policy" → select your client, pick a product (e.g. AIA Health Shield), set premium & sum assured → Submit. An underwriting case is auto-created.', route: '/policies', icon: ShieldCheck, color: '#10b981' },
+            { step: '5', title: 'Try the AI Assistant', desc: 'Click the floating chat button (bottom-right corner) and type "help" to see what the AI can do. Try "how many clients do I have?" or "dashboard summary".', icon: Bot, color: '#ec4899' },
+            { step: '6', title: 'Check Workflows & Activities', desc: 'Visit Workflows to see auto-created tasks. Go to Activities to log calls and meetings. These pages track your day-to-day work.', route: '/workflows', icon: GitBranch, color: '#06b6d4' },
+          ].map((s, i) => (
+            <div key={i} style={{
+              display: 'flex', alignItems: 'flex-start', gap: 12, padding: '12px 14px',
+              background: 'var(--bg-elevated)', borderRadius: 10, cursor: s.route ? 'pointer' : 'default',
+              border: '1px solid transparent', transition: 'all 0.2s',
+            }}
+            onClick={() => s.route && navigate(s.route)}
+            onMouseEnter={e => { if (s.route) { (e.currentTarget as HTMLDivElement).style.borderColor = s.color + '40'; (e.currentTarget as HTMLDivElement).style.transform = 'translateX(4px)' } }}
+            onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'transparent'; (e.currentTarget as HTMLDivElement).style.transform = 'translateX(0)' }}
+            >
+              <div style={{
+                minWidth: 32, height: 32, borderRadius: '50%', background: s.color,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'white', fontSize: 14, fontWeight: 700, marginTop: 2,
+              }}>{s.step}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <s.icon size={14} color={s.color} />
+                  <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>{s.title}</span>
+                </div>
+                <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{s.desc}</p>
+              </div>
+              {s.route && <ExternalLink size={12} color={s.color} style={{ marginTop: 6, flexShrink: 0 }} />}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ═══ END-TO-END JOURNEYS ═══ */}
+      <div style={{ marginBottom: 28 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-primary)' }}>
+          <Map size={20} color="#3b82f6" /> End-to-End Journeys — Common Workflows
+        </h2>
+        <p style={{ fontSize: 13, color: 'var(--text-dim)', marginTop: -8, marginBottom: 14 }}>
+          These multi-step walkthroughs show how pages connect together for real-world tasks.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {JOURNEYS.map((j, ji) => (
+            <div key={ji} style={{
+              background: 'var(--bg-card)', border: `1px solid ${j.color}30`,
+              borderRadius: 12, overflow: 'hidden',
+            }}>
+              <button
+                onClick={() => setActiveJourney(activeJourney === ji ? null : ji)}
+                style={{
+                  width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '14px 18px', background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'var(--text-primary)', textAlign: 'left',
+                }}
+              >
+                <div style={{ width: 36, height: 36, borderRadius: 8, background: j.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <j.icon size={18} color={j.color} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600 }}>{j.title}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>{j.subtitle}</div>
+                </div>
+                {activeJourney === ji ? <ChevronDown size={16} color="var(--text-dim)" /> : <ChevronRight size={16} color="var(--text-dim)" />}
+              </button>
+              {activeJourney === ji && (
+                <div style={{ padding: '0 18px 18px', borderTop: '1px solid var(--border-subtle)' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 14 }}>
+                    {j.steps.map((step, si) => (
+                      <div key={si} style={{
+                        display: 'flex', alignItems: 'flex-start', gap: 12, padding: '10px 12px',
+                        background: 'var(--bg-elevated)', borderRadius: 8,
+                        cursor: step.route ? 'pointer' : 'default',
+                        border: '1px solid transparent', transition: 'all 0.15s',
+                      }}
+                      onClick={() => step.route && navigate(step.route)}
+                      onMouseEnter={e => { if (step.route) (e.currentTarget as HTMLDivElement).style.borderColor = j.color + '40' }}
+                      onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.borderColor = 'transparent'}
+                      >
+                        <div style={{
+                          minWidth: 24, height: 24, borderRadius: '50%', background: j.color,
+                          color: 'white', fontSize: 11, fontWeight: 700,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 1,
+                        }}>{si + 1}</div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{step.title}</div>
+                          <div style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5, marginTop: 2 }}>{step.desc}</div>
+                          {step.page && <span style={{ fontSize: 11, color: j.color, marginTop: 4, display: 'inline-flex', alignItems: 'center', gap: 3, fontWeight: 600 }}><MousePointerClick size={10} /> {step.page}</span>}
+                        </div>
+                        {step.route && <ArrowRightCircle size={14} color={j.color} style={{ flexShrink: 0, marginTop: 4 }} />}
+                      </div>
+                    ))}
+                  </div>
+                  {j.tip && (
+                    <div style={{
+                      marginTop: 12, padding: '10px 14px', borderRadius: 8,
+                      background: '#f59e0b12', border: '1px solid #f59e0b25',
+                      display: 'flex', alignItems: 'flex-start', gap: 8,
+                    }}>
+                      <Lightbulb size={14} color="#f59e0b" style={{ marginTop: 2, flexShrink: 0 }} />
+                      <span style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{j.tip}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -447,6 +640,27 @@ function FeatureSection({ section, isOpen, onToggle, onNavigate, onScrollTo }: {
             </div>
           )}
 
+          {/* Pro Tips */}
+          {content.tips && content.tips.length > 0 && (
+            <div style={{ marginTop: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                <Lightbulb size={14} color="#f59e0b" />
+                <SectionLabel color="#f59e0b" noMargin>Pro Tips</SectionLabel>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {content.tips.map((tip, i) => (
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 12px',
+                    background: '#f59e0b08', borderRadius: 8, border: '1px solid #f59e0b18',
+                  }}>
+                    <span style={{ color: '#f59e0b', fontSize: 12, marginTop: 1 }}>💡</span>
+                    <span style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{tip}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Workflow diagram(s) */}
           {content.workflows && content.workflows.length > 0 && (
             <div style={{ marginTop: 16 }}>
@@ -548,6 +762,7 @@ interface FeatureContent {
   aiCommands?: string[]
   workflows?: Wf[]
   related?: string[]
+  tips?: string[]
 }
 
 const S = (label: string, type: WfStage['type'] = 'normal'): WfStage => ({ label, type })
@@ -574,6 +789,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Use the revenue chart to compare monthly premium vs commission trends' },
     ],
     aiCommands: ['dashboard', 'summary', "how's business", 'how many clients', 'how many policies'],
+    tips: [
+      'Start every day here — the AI Recommendations section tells you exactly what to focus on next.',
+      'Click any KPI card number to navigate to the related page (e.g. click client count → Clients page).',
+      'The pipeline funnel chart shows where your deals get stuck — focus on the narrowest stage.',
+    ],
     related: ['pipeline', 'mdrt', 'approvals', 'commissions'],
   },
 
@@ -600,6 +820,12 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Use the Greetings tab to send birthday or anniversary messages' },
     ],
     aiCommands: ['add client', 'register customer', 'find client Thida', 'list clients', 'search customer'],
+    tips: [
+      'Always fill in the monthly income field — it feeds into risk scoring and 4 Pillars assessment.',
+      'Use the search bar to find clients by name, phone, or email — it searches all fields.',
+      'Check the "Policies expiring within 60 days" alert on client profiles to catch upcoming renewals.',
+      'The AI Needs Analysis works best when all 4 Pillar sections have data filled in.',
+    ],
     related: ['policies', 'pipeline', 'activities', 'ai-hub'],
   },
 
@@ -624,6 +850,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Use the status filter to find policies by status (active, lapsed, etc.)' },
     ],
     aiCommands: ['create policy', 'issue insurance', 'list policies', 'renew policy', 'cancel policy'],
+    tips: [
+      'Choose "Annual" payment frequency for higher first-year commissions when the client can afford it.',
+      'After creating a policy, immediately check the Underwriting page to see the auto-generated risk assessment.',
+      'Use the status filter to quickly spot lapsed policies that might need renewal outreach.',
+    ],
     workflows: [{
       name: 'Policy Issuance (Happy Path)',
       sla: 'SLA: submitted 4h, under_review 24h, underwriting 48h, approved 8h',
@@ -662,6 +893,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Add notes and conditions, then submit — logged in Audit Trail', linkRoute: '/audit' },
     ],
     aiCommands: ['underwriting status', 'risk assessment', 'pending reviews'],
+    tips: [
+      'Risk score ≤5 = Preferred (auto-approve eligible). Score >15 = likely decline — prepare the client.',
+      'Use "Approve with Loading" for substandard risk cases — adds 25% to the premium rather than declining.',
+      'Always add decision notes — they appear in the Audit Trail for compliance review.',
+    ],
     workflows: [{
       name: 'Underwriting Assessment (Happy Path)',
       sla: 'SLA: pending 4h, auto_assessment 1h, manual_review 48h, docs_requested 72h',
@@ -702,6 +938,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'All decisions are logged in the Audit Trail', linkRoute: '/audit' },
     ],
     aiCommands: ['submit claim', 'file claim', 'claim status', 'pending claims', 'approve claim'],
+    tips: [
+      'Always upload supporting documents before the Docs Verification stage to avoid delays.',
+      'Watch the fraud score — claims flagged for fraud require extra scrutiny and manager approval.',
+      'The claim amount and approved amount can differ — set the approved amount during the assessment stage.',
+    ],
     workflows: [{
       name: 'Claim Processing (Happy Path)',
       sla: 'SLA: submitted 2h, docs 24h, fraud 48h, assessment 24h, approved 8h, payment 48h',
@@ -741,6 +982,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Check the Dashboard for pipeline overview charts', linkRoute: '/' },
     ],
     aiCommands: ['add deal', 'new opportunity', 'pipeline', 'deals', 'pipeline insights', 'deal health'],
+    tips: [
+      'Keep the probability % updated as you progress — it feeds into the weighted pipeline value on Dashboard.',
+      'If a deal stalls at Negotiation for more than 2 weeks, consider using an objection script from AI Hub.',
+      'The stage summary bar shows total premium per column — focus on the highest-value stages first.',
+    ],
     workflows: [{
       name: 'Sales Pipeline Stages',
       stages: [
@@ -772,6 +1018,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'All approval decisions are tracked in the Audit Trail', linkRoute: '/audit' },
     ],
     aiCommands: ['approval queue', 'approvals', 'approve', 'reject'],
+    tips: [
+      'Green confidence bars (>85%) are generally safe to approve. Yellow (<85%) deserves a closer look.',
+      'Check the Approvals page after using the AI Assistant — write operations always queue here first.',
+      'Expired approvals need to be re-submitted through the AI Assistant.',
+    ],
     related: ['ai-chat', 'workflows', 'audit'],
   },
 
@@ -796,6 +1047,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Click "Mark Complete" to update completed activities' },
     ],
     aiCommands: ['schedule meeting', 'book call', 'today agenda', "what's planned", 'create reminder'],
+    tips: [
+      'Log every client interaction — activity count contributes to your MDRT case count benchmarking.',
+      'Use the "Today" stats card to make sure you\'re hitting your daily call/meeting targets.',
+      'Link activities to clients so they appear on the client\'s detail page history.',
+    ],
     related: ['clients', 'pipeline', 'dashboard'],
   },
 
@@ -817,6 +1073,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Check your MDRT progress — commissions feed into MDRT targets', linkRoute: '/mdrt' },
     ],
     aiCommands: ['commissions', 'earnings', 'how much earned'],
+    tips: [
+      'First-year commissions are typically highest — focus on new policy sales if you need to boost earnings.',
+      'Check Pending commissions regularly to estimate upcoming payouts.',
+      'Your commission data directly feeds into the MDRT Tracker qualification calculations.',
+    ],
     related: ['policies', 'mdrt', 'dashboard'],
   },
 
@@ -841,6 +1102,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Use Income Projection to plan for conservative to stretch scenarios' },
     ],
     aiCommands: ['MDRT', 'million dollar', 'MDRT progress', 'qualification status'],
+    tips: [
+      'Set your targets at the start of each year using the Settings panel on the Progress tab.',
+      'Check the "Required per remaining month" metric to know exactly how much premium you need monthly.',
+      'Use Peer Benchmarking to motivate yourself — see how top performers are tracking.',
+    ],
     related: ['commissions', 'policies', 'dashboard'],
   },
 
@@ -864,6 +1130,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Explore Corporate Solutions for group insurance options', linkRoute: '/corporate' },
     ],
     aiCommands: ['retirement plan', 'education plan', 'tax plan', 'cash flow health', 'financial health'],
+    tips: [
+      'Run the Cash Flow Health Score during client meetings — it\'s a powerful visual tool to show coverage gaps.',
+      'Use Retirement Calculator results to justify higher sum-assured recommendations.',
+      'Education Calculator helps parents see the real cost of education with inflation factored in.',
+    ],
     related: ['clients', 'policies', 'corporate'],
   },
 
@@ -885,6 +1156,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Use Benefits Comparison to show potential savings to corporate clients' },
     ],
     aiCommands: ['corporate insurance', 'group benefits', 'employee benefits', 'group health'],
+    tips: [
+      'The Benefits Comparison tab is your best sales tool — show potential savings side by side.',
+      'Upload proposals and quote documents to company profiles using the document manager.',
+      'Combine Corporate with Financial Planning tools for a comprehensive group benefits pitch.',
+    ],
     related: ['planning', 'clients', 'policies'],
   },
 
@@ -911,6 +1187,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Select the channel (Viber, Telegram, SMS, WhatsApp) and click Send' },
     ],
     aiCommands: ['generate content', 'create post', 'objection handling', 'handle price objection', 'greetings', 'birthdays'],
+    tips: [
+      'Schedule content posts in advance — batch your social media work for the week on Monday.',
+      'Read through objection scripts BEFORE client meetings so you\'re prepared for common pushback.',
+      'Birthday greetings sent via Viber/Telegram have the highest open rates — prioritize those channels.',
+    ],
     related: ['clients', 'activities'],
   },
 
@@ -936,6 +1217,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Overdue tasks are highlighted and escalated to manager' },
     ],
     aiCommands: ['workflow status', 'my tasks', 'pending tasks', 'process check', 'escalate'],
+    tips: [
+      'Check "My Tasks" first thing every morning — overdue tasks escalate to your manager automatically.',
+      'SLA timers are real — focus on items closest to their deadline to avoid escalations.',
+      'The "All Instances" table gives you a big-picture view of all workflows across the org.',
+    ],
     workflows: [
       {
         name: '1. Policy Issuance',
@@ -982,6 +1268,11 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Review the full JSON details for each audit entry' },
       { text: 'Use for compliance reporting and action investigation' },
     ],
+    tips: [
+      'Filter by entity type (e.g., Claims, Underwriting) to quickly find relevant decisions.',
+      'Use the JSON detail view to see exactly what changed in each action — useful for compliance audits.',
+      'The Audit Trail is read-only — no one can modify or delete entries, ensuring full integrity.',
+    ],
     related: ['approvals', 'workflows', 'claims', 'underwriting'],
   },
 
@@ -1008,6 +1299,12 @@ const FEATURE_CONTENT: Record<string, FeatureContent> = {
       { text: 'Click the clear button to reset conversation history' },
     ],
     aiCommands: ['help', 'dashboard', 'add client', 'create policy', 'MDRT progress', 'schedule meeting', 'pipeline insights', "what's planned", 'submit claim'],
+    tips: [
+      'Start with "help" to see all available commands — the AI shows exactly what it can do.',
+      'Use natural language — "how\'s my pipeline looking?" works just as well as formal commands.',
+      'Write operations always require approval — don\'t worry about the AI making changes without your consent.',
+      'The AI remembers your conversation within the session — you can ask follow-up questions.',
+    ],
     related: ['approvals', 'dashboard', 'clients', 'policies'],
   },
 }
