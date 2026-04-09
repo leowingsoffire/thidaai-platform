@@ -174,6 +174,7 @@ def create_case(data: UWCreateRequest, user: User = Depends(get_optional_user), 
         decision="pending",
     )
     db.add(case)
+    db.flush()  # Ensure case.id is generated before starting workflow
 
     # Update policy underwriting status
     policy.underwriting_status = "pending"
