@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     viber_webhook_url: str = ""  # e.g. https://yourdomain.com/api/viber/webhook
     app_env: str = "development"
     app_secret_key: str = "change-this"
-    cors_origins: str = "http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177,http://localhost:5178,http://localhost:5179,http://localhost:5180"
+    cors_origins: str = "http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177,http://localhost:5178,http://localhost:5179,http://localhost:5180,https://frontend-five-lake-93.vercel.app"
 
     model_config = {"env_file": "../.env", "env_file_encoding": "utf-8", "extra": "ignore"}
 
