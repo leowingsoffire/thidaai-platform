@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'https://thidaai-backend-production.up.railway.app/api';
+const API_BASE = (import.meta.env.VITE_API_URL || 'https://thidaai-backend-production.up.railway.app/api').trim();
 
 function getToken(): string | null {
   return localStorage.getItem('token');

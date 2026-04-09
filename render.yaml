@@ -15,6 +15,6 @@ services:
       - key: APP_SECRET_KEY
         generateValue: true
       - key: CORS_ORIGINS
-        value: https://your-app.vercel.app
+        value: https://frontend-five-lake-93.vercel.app
       - key: PYTHON_VERSION
         value: 3.11.0
