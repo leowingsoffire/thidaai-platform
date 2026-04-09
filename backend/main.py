@@ -121,7 +121,7 @@ app.include_router(whatsapp.router)
 def root():
     return {
         "message": "AI Assistant – AI Power Workflow System",
-        "version": "2.0.0",
+        "version": "2.0.1",
         "docs": "/docs",
         "modules": [
             "auth", "workflows", "underwriting", "claims",
@@ -135,4 +135,4 @@ def root():
 
 @app.get("/health")
 def health():
-    return {"status": "healthy", "version": "2.0.0"}
+    return {"status": "healthy", "version": "2.0.1"}
