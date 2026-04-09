@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api, type CorporateProfile, type Client } from '../api'
-import { Building2, Users, Calculator, BarChart3, Shield, CheckCircle, AlertTriangle, TrendingUp } from 'lucide-react'
+import { Building2, Users, Calculator, BarChart3, Shield, CheckCircle, AlertTriangle, TrendingUp, Paperclip } from 'lucide-react'
+import DocumentManager from '../components/DocumentManager'
 
 const INDUSTRIES = [
   'technology','finance','manufacturing','construction','healthcare',
@@ -16,6 +17,7 @@ export default function CorporateSolutions() {
   const [showForm, setShowForm] = useState(false)
   const [calcResult, setCalcResult] = useState<any>(null)
   const [compareResult, setCompareResult] = useState<any>(null)
+  const [expandedProfile, setExpandedProfile] = useState<string | null>(null)
 
   const [form, setForm] = useState({
     client_id: '', company_name: '', industry: 'technology', employee_count: 50,
@@ -144,12 +146,15 @@ export default function CorporateSolutions() {
             ) : (
               <div className="grid-3">
                 {profiles.map(p => (
-                  <div key={p.id} className="card" style={{ cursor: 'pointer' }}>
+                  <div key={p.id} className="card" style={{ cursor: 'pointer' }} onClick={() => setExpandedProfile(expandedProfile === p.id ? null : p.id)}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                       <h4 style={{ fontSize: 15, fontWeight: 700 }}>{p.company_name}</h4>
-                      <span className={`badge badge-${p.risk_profile === 'low' ? 'green' : p.risk_profile === 'medium' ? 'yellow' : 'red'}`}>
-                        {p.risk_profile} risk
-                      </span>
+                      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                        <Paperclip size={13} color="var(--gray-400)" />
+                        <span className={`badge badge-${p.risk_profile === 'low' ? 'green' : p.risk_profile === 'medium' ? 'yellow' : 'red'}`}>
+                          {p.risk_profile} risk
+                        </span>
+                      </div>
                     </div>
                     <div style={{ fontSize: 12, color: 'var(--gray-500)', marginBottom: 8 }}>
                       <div><Users size={12} style={{ verticalAlign: 'middle' }} /> {p.employee_count} employees</div>
@@ -173,6 +178,11 @@ export default function CorporateSolutions() {
                             </span>
                           ))}
                         </div>
+                      </div>
+                    )}
+                    {expandedProfile === p.id && (
+                      <div style={{ marginTop: 14, borderTop: '1px solid var(--gray-200)', paddingTop: 14 }} onClick={e => e.stopPropagation()}>
+                        <DocumentManager entityType="corporate" entityId={p.id} />
                       </div>
                     )}
                   </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { api, type Client, type Policy, type NeedsAnalysis, type Proposal, type AutoGreetingItem } from '../api'
 import { ArrowLeft, ShieldCheck, Brain, FileText, Edit2, Trash2, X, Phone, Mail, MapPin, Heart, Home, Lightbulb, Smile, Target, AlertTriangle, Gift, Send } from 'lucide-react'
+import DocumentManager from '../components/DocumentManager'
 
 export default function ClientDetail() {
   const { id } = useParams<{ id: string }>()
@@ -11,7 +12,7 @@ export default function ClientDetail() {
   const [proposals, setProposals] = useState<Proposal[]>([])
   const [analysis, setAnalysis] = useState<NeedsAnalysis | null>(null)
   const [loading, setLoading] = useState(true)
-  const [tab, setTab] = useState<'overview' | 'policies' | 'proposals' | 'greetings'>('overview')
+  const [tab, setTab] = useState<'overview' | 'policies' | 'proposals' | 'greetings' | 'documents'>('overview')
   const [analyzing, setAnalyzing] = useState(false)
   const [editModal, setEditModal] = useState(false)
   const [form, setForm] = useState<any>({})
@@ -155,6 +156,7 @@ export default function ClientDetail() {
         <button className={`tab ${tab === 'greetings' ? 'active' : ''}`} onClick={() => setTab('greetings')}>
           Greetings{greetings.length > 0 ? ` (${greetings.length})` : ''}
         </button>
+        <button className={`tab ${tab === 'documents' ? 'active' : ''}`} onClick={() => setTab('documents')}>Documents</button>
       </div>
 
       {tab === 'overview' && (
@@ -344,6 +346,12 @@ export default function ClientDetail() {
             </tbody>
           </table>
         )
+      )}
+
+      {tab === 'documents' && id && (
+        <div className="card" style={{ padding: 20 }}>
+          <DocumentManager entityType="client" entityId={id} />
+        </div>
       )}
 
       {editModal && (

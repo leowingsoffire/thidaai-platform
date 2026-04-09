@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { api, UnderwritingCase } from '../api'
+import { ChevronDown, ChevronRight, Paperclip } from 'lucide-react'
+import DocumentManager from '../components/DocumentManager'
 
 const RISK_COLORS: Record<string, string> = { preferred: '#10b981', standard: '#3b82f6', substandard: '#f59e0b', declined: '#ef4444' }
 
@@ -7,6 +9,7 @@ export default function Underwriting() {
   const [cases, setCases] = useState<UnderwritingCase[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('')
+  const [expandedCase, setExpandedCase] = useState<string | null>(null)
 
   useEffect(() => { loadCases() }, [filter])
 
@@ -43,11 +46,13 @@ export default function Underwriting() {
         <div className="table-container">
           <table>
             <thead>
-              <tr><th>Policy</th><th>Client</th><th>Product</th><th>Risk</th><th>Score</th><th>Auto</th><th>Decision</th><th>Status</th><th>Actions</th></tr>
+              <tr><th style={{ width: 30 }}></th><th>Policy</th><th>Client</th><th>Product</th><th>Risk</th><th>Score</th><th>Auto</th><th>Decision</th><th>Status</th><th>Actions</th><th style={{ width: 40 }}><Paperclip size={14} /></th></tr>
             </thead>
             <tbody>
               {cases.map(c => (
-                <tr key={c.id}>
+                <>
+                <tr key={c.id} onClick={() => setExpandedCase(expandedCase === c.id ? null : c.id)} style={{ cursor: 'pointer' }}>
+                  <td>{expandedCase === c.id ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</td>
                   <td><strong>{c.policy_number || c.policy_id.substring(0, 8)}</strong></td>
                   <td>{c.client_name || '—'}</td>
                   <td>{c.product_name || '—'}</td>
@@ -56,7 +61,7 @@ export default function Underwriting() {
                   <td>{c.auto_decision || '—'}</td>
                   <td>{c.decision || '—'}</td>
                   <td><span className="badge">{c.status}</span></td>
-                  <td>
+                  <td onClick={e => e.stopPropagation()}>
                     {c.status !== 'decided' && (
                       <div className="btn-group-sm">
                         <button className="btn btn-sm btn-success" onClick={() => makeDecision(c.id, 'approved')}>Approve</button>
@@ -65,7 +70,16 @@ export default function Underwriting() {
                       </div>
                     )}
                   </td>
+                  <td><Paperclip size={13} color="var(--text-dim)" /></td>
                 </tr>
+                {expandedCase === c.id && (
+                  <tr key={`${c.id}-docs`}>
+                    <td colSpan={11} style={{ padding: '12px 20px', background: 'var(--bg-elevated)' }}>
+                      <DocumentManager entityType="underwriting" entityId={c.id} />
+                    </td>
+                  </tr>
+                )}
+                </>
               ))}
             </tbody>
           </table>
