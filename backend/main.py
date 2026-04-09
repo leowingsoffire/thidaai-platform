@@ -22,6 +22,7 @@ from routes.content import router as content_router
 from routes.content import seed_objections
 from routes.greetings import router as greetings_router
 from routes.documents import router as documents_router
+from routes.settings import router as settings_router
 from services.workflow_service import seed_workflows
 from services.auth_service import hash_password
 from models import User
@@ -108,6 +109,7 @@ app.include_router(corporate_router)
 app.include_router(content_router)
 app.include_router(greetings_router)
 app.include_router(documents_router)
+app.include_router(settings_router)
 
 # CRM / existing modules
 app.include_router(dashboard.router)

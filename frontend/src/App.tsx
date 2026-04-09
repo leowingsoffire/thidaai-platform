@@ -21,6 +21,7 @@ import CorporateSolutions from './pages/CorporateSolutions'
 import AICommHub from './pages/AICommHub'
 import AIChat from './components/AIChat'
 import UserGuide from './pages/UserGuide'
+import AdminSettings from './pages/AdminSettings'
 import './App.css'
 
 const NAV_MAIN = [
@@ -43,6 +44,7 @@ const NAV_MAIN = [
 const NAV_BOTTOM = [
   { to: '/audit', icon: ClipboardList, label: 'Audit Trail' },
   { to: '/guide', icon: BookOpen, label: 'User Guide' },
+  { to: '/settings', icon: Settings, label: 'Admin Settings' },
 ]
 
 const PAGE_TITLES: Record<string, string> = {
@@ -62,6 +64,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/ai-hub': 'AI Communication Hub',
   '/audit': 'Audit Trail',
   '/guide': 'User Guide',
+  '/settings': 'Admin Settings',
 }
 
 export default function App() {
@@ -228,6 +231,7 @@ export default function App() {
           <Route path="/corporate" element={<CorporateSolutions />} />
           <Route path="/ai-hub" element={<AICommHub />} />
           <Route path="/guide" element={<UserGuide />} />
+          <Route path="/settings" element={<AdminSettings />} />
           <Route path="/login" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

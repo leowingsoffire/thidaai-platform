@@ -600,3 +600,15 @@ class DocumentAttachment(Base):
     created_at = Column(DateTime(timezone=True), default=datetime.utcnow)
 
     uploader = relationship("User", foreign_keys=[uploaded_by])
+
+
+# ============================================================
+# SYSTEM SETTINGS (key-value store)
+# ============================================================
+
+class SystemSetting(Base):
+    """Persisted admin settings as key-value pairs."""
+    __tablename__ = "system_settings"
+
+    key = Column(String(255), primary_key=True)
+    value = Column(Text, nullable=False)

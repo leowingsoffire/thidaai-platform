@@ -687,10 +687,24 @@ code {
 .db-hero {
   display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 28px; gap: 16px; flex-wrap: wrap;
+  background: linear-gradient(135deg, #f8f6ff 0%, #f0ebff 40%, #fdf2f8 100%);
+  border-radius: 20px; padding: 28px 32px;
+  border: 1px solid rgba(124,92,252,0.1);
+  position: relative; overflow: hidden;
+}
+.db-hero::after {
+  content: '';
+  position: absolute; right: -30px; top: -30px;
+  width: 150px; height: 150px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,92,252,0.08), transparent 70%);
+  pointer-events: none;
 }
 .db-hero-title {
   font-size: 28px; font-weight: 800; color: var(--text-primary);
   letter-spacing: -0.5px; margin: 0 0 2px; line-height: 1.2;
+  background: linear-gradient(135deg, #1e1f2b, #7c5cfc);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 .db-hero-sub {
   font-size: 14px; color: var(--text-dim); margin: 0; font-weight: 400;
@@ -809,24 +823,31 @@ code {
 @media (max-width: 640px) { .db-stat-row { grid-template-columns: 1fr; } }
 
 .db-stat {
-  background: linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--stat-accent) 6%, #ffffff) 100%);
-  border: 1px solid color-mix(in srgb, var(--stat-accent) 18%, transparent);
-  border-radius: 16px; padding: 18px 20px;
+  background: linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--stat-accent) 8%, #ffffff) 60%, color-mix(in srgb, var(--stat-accent) 14%, #ffffff) 100%);
+  border: 1px solid color-mix(in srgb, var(--stat-accent) 20%, transparent);
+  border-radius: 18px; padding: 20px 22px;
   display: flex; align-items: center; gap: 14px;
   cursor: pointer; position: relative; overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--stat-accent) 6%, transparent);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--stat-accent) 10%, transparent), 0 1px 3px rgba(124,92,252,0.04);
 }
 .db-stat::before {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--stat-accent) 4%, transparent), color-mix(in srgb, var(--stat-accent) 10%, transparent));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--stat-accent) 6%, transparent), color-mix(in srgb, var(--stat-accent) 16%, transparent));
   opacity: 0; transition: opacity 0.3s;
+}
+.db-stat::after {
+  content: '';
+  position: absolute; right: -20px; top: -20px;
+  width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--stat-accent) 8%, transparent), transparent 70%);
+  pointer-events: none;
 }
 .db-stat:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px color-mix(in srgb, var(--stat-accent) 15%, transparent), 0 2px 8px rgba(0,0,0,0.04);
-  border-color: color-mix(in srgb, var(--stat-accent) 35%, transparent);
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--stat-accent) 18%, transparent), 0 4px 12px rgba(0,0,0,0.06);
+  border-color: color-mix(in srgb, var(--stat-accent) 40%, transparent);
 }
 .db-stat:hover::before { opacity: 1; }
 .db-stat-left-bar {
@@ -1038,4 +1059,28 @@ code {
   border-top: 1px solid var(--border-subtle);
   font-size: 11px; color: var(--text-dim);
   letter-spacing: 0.3px;
+  background: linear-gradient(135deg, transparent, rgba(124,92,252,0.02));
 }
+
+/* ── Admin Settings ── */
+.page .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 0; }
+.page .form-group { margin-bottom: 16px; }
+.page .form-group label {
+  display: block; font-size: 12px; font-weight: 600; color: var(--text-muted);
+  margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.3px;
+}
+.page .form-group input,
+.page .form-group select,
+.page .form-group textarea {
+  width: 100%; padding: 9px 12px; border: 1px solid var(--border-card);
+  border-radius: 10px; font-size: 13px; background: var(--bg-primary);
+  color: var(--text-primary); transition: all 0.15s;
+  font-family: inherit;
+}
+.page .form-group input:focus,
+.page .form-group select:focus,
+.page .form-group textarea:focus {
+  outline: none; border-color: #7c5cfc;
+  box-shadow: 0 0 0 3px rgba(124,92,252,0.1);
+}
+.page .form-group textarea { resize: vertical; }

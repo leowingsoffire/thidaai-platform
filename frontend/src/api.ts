@@ -426,4 +426,9 @@ export const api = {
   deleteDocument: (docId: string) =>
     request<void>(`/documents/${docId}`, { method: 'DELETE' }),
   getDocumentDownloadUrl: (docId: string) => `${API_BASE}/documents/${docId}/download`,
+
+  // Admin Settings
+  getSettings: () => request<any>('/settings'),
+  saveSettings: (data: any) => request<any>('/settings', { method: 'PUT', body: JSON.stringify(data) }),
+  testConnection: (type: string, config: any) => request<{ success: boolean; message: string }>(`/settings/test/${type}`, { method: 'POST', body: JSON.stringify(config) }),
 };
