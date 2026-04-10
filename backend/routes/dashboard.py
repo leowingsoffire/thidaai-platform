@@ -208,7 +208,7 @@ def _revenue_tracker(db: Session):
 
 def _daily_pipeline(db: Session):
     """Active pipeline deals grouped by stage."""
-    stages = ["lead", "contacted", "proposal_sent", "negotiation", "closing"]
+    stages = ["prospect", "contacted", "needs_analysis", "proposal", "negotiation"]
     pipeline = []
     for stage in stages:
         deals = db.query(PipelineDeal).filter(PipelineDeal.stage == stage).all()

@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react'
 import { api, type PipelineDeal, type Client } from '../api'
-import { Plus, X, Trash2, ChevronDown, ChevronRight, Calendar, TrendingUp, User } from 'lucide-react'
+import { Plus, X, Trash2, ChevronDown, ChevronRight, Calendar, TrendingUp, User, Zap, AlertTriangle, Target, Activity } from 'lucide-react'
 import FeatureGuide from '../components/FeatureGuide'
 
-const STAGES = ['prospect', 'approach', 'fact_find', 'proposal', 'negotiation', 'closed_won', 'closed_lost']
+const STAGES = ['prospect', 'contacted', 'needs_analysis', 'proposal', 'negotiation', 'closed_won', 'closed_lost']
 const STAGE_LABELS: Record<string, string> = {
-  prospect: 'Prospect', approach: 'Approach', fact_find: 'Fact Find',
+  prospect: 'Prospect', contacted: 'Contacted', needs_analysis: 'Needs Analysis',
   proposal: 'Proposal', negotiation: 'Negotiation', closed_won: 'Closed Won', closed_lost: 'Closed Lost',
 }
 const STAGE_COLORS: Record<string, string> = {
-  prospect: 'var(--gray-400)', approach: 'var(--blue-500)', fact_find: 'var(--purple-500)',
+  prospect: 'var(--gray-400)', contacted: 'var(--blue-500)', needs_analysis: 'var(--purple-500)',
   proposal: 'var(--orange-500)', negotiation: 'var(--yellow-500)', closed_won: 'var(--green-500)', closed_lost: 'var(--aia-red)',
+}
+const SCORE_COLORS: Record<string, string> = {
+  'Hot': '#ef4444', 'Warm': '#f59e0b', 'Cold': '#3b82f6', 'At Risk': '#6b7280',
 }
 const PRODUCTS = [
   'AIA Universal Life', 'AIA Short-term Endowment', 'AIA Health Shield',
@@ -22,6 +25,8 @@ export default function Pipeline() {
   const [deals, setDeals] = useState<PipelineDeal[]>([])
   const [clients, setClients] = useState<Client[]>([])
   const [summary, setSummary] = useState<any>(null)
+  const [insights, setInsights] = useState<any>(null)
+  const [showInsights, setShowInsights] = useState(false)
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [form, setForm] = useState<any>({
@@ -31,8 +36,8 @@ export default function Pipeline() {
   const [expandedDeal, setExpandedDeal] = useState<string | null>(null)
 
   const load = () => {
-    Promise.all([api.getPipeline(), api.getClients(), api.getPipelineSummary()])
-      .then(([d, c, s]) => { setDeals(d); setClients(c); setSummary(s) })
+    Promise.all([api.getPipeline(), api.getClients(), api.getPipelineSummary(), api.getPipelineAIInsights()])
+      .then(([d, c, s, ai]) => { setDeals(d); setClients(c); setSummary(s); setInsights(ai) })
       .catch(() => {}).finally(() => setLoading(false))
   }
   useEffect(load, [])
@@ -98,9 +103,73 @@ export default function Pipeline() {
           {summary && <p style={{ fontSize: 12, color: 'var(--gray-400)', marginTop: 2 }}>{summary.total_deals} deals · {fmt(summary.total_value)} MMK total · {fmt(summary.weighted_value)} MMK weighted</p>}
         </div>
         <div className="page-header-actions">
+          <button className="btn-secondary" onClick={() => setShowInsights(!showInsights)}><Zap size={15} /> {showInsights ? 'Hide' : 'AI'} Insights</button>
           <button className="btn-primary" onClick={() => setShowModal(true)}><Plus size={15} /> New Deal</button>
         </div>
       </div>
+
+      {showInsights && insights && (
+        <div style={{ marginBottom: 20 }}>
+          {/* Pipeline Health Bar */}
+          <div className="stat-card" style={{ marginBottom: 16, padding: 16, display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 48, height: 48, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: insights.pipeline_health?.score >= 80 ? 'rgba(34,197,94,0.15)' : insights.pipeline_health?.score >= 60 ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)',
+                color: insights.pipeline_health?.score >= 80 ? '#22c55e' : insights.pipeline_health?.score >= 60 ? '#f59e0b' : '#ef4444',
+                fontSize: 18, fontWeight: 700,
+              }}>{insights.pipeline_health?.score}</div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>Pipeline Health: {insights.pipeline_health?.label}</div>
+                <div style={{ fontSize: 12, color: 'var(--gray-400)' }}>{insights.pipeline_health?.total_deals} active · {insights.pipeline_health?.stale_deals} stale · {fmt(insights.pipeline_health?.total_weighted_value || 0)} MMK weighted</div>
+              </div>
+            </div>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              {insights.pipeline_health?.tips?.map((tip: string, i: number) => (
+                <div key={i} style={{ fontSize: 12, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
+                  <AlertTriangle size={11} color="var(--yellow-500)" /> {tip}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Deal Insights Cards */}
+          {insights.deal_insights?.length > 0 && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 12 }}>
+              {insights.deal_insights.map((d: any) => (
+                <div key={d.deal_id} className="stat-card" style={{ padding: 14 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <div style={{ fontWeight: 600, fontSize: 13 }}>{d.product_name}</div>
+                    <span style={{
+                      fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 10,
+                      background: `${SCORE_COLORS[d.score_label] || '#6b7280'}20`,
+                      color: SCORE_COLORS[d.score_label] || '#6b7280',
+                    }}>
+                      <Target size={10} style={{ marginRight: 3, verticalAlign: '-1px' }} />{d.ai_score} · {d.score_label}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--gray-400)', marginBottom: 6 }}>
+                    <User size={10} style={{ marginRight: 3, verticalAlign: '-1px' }} />{d.client_name} · {STAGE_LABELS[d.stage] || d.stage} · {fmt(d.expected_premium)} MMK
+                  </div>
+                  <div style={{ fontSize: 11, color: 'var(--gray-400)', marginBottom: 8 }}>
+                    {d.days_in_pipeline}d in pipeline{d.days_since_activity != null ? ` · ${d.days_since_activity}d since activity` : ''}{d.existing_policies > 0 ? ` · ${d.existing_policies} existing policies` : ''}
+                  </div>
+                  {d.next_actions?.length > 0 && (
+                    <div style={{ borderTop: '1px solid var(--border-card)', paddingTop: 8 }}>
+                      {d.next_actions.map((a: any, i: number) => (
+                        <div key={i} style={{ fontSize: 11, display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
+                          <Activity size={10} color={a.priority === 'high' ? '#ef4444' : a.priority === 'medium' ? '#f59e0b' : '#6b7280'} />
+                          <span style={{ color: 'var(--text-secondary)' }}>{a.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="pipeline-board">
         {activeStages.map(stage => {
