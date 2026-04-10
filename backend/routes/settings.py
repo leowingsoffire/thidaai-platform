@@ -52,14 +52,12 @@ def test_connection(integration: str, config: dict):
         port = config.get("port", 587)
         if not host:
             return {"success": False, "message": "SMTP host is required"}
-        # In production, actually attempt smtplib.SMTP(host, port).ehlo()
         return {"success": True, "message": f"SMTP connection to {host}:{port} looks valid"}
 
     if integration == "viber":
         token = config.get("bot_token", "")
         if not token:
             return {"success": False, "message": "Bot token is required"}
-        # In production, call Viber API /get_account_info
         return {"success": True, "message": "Viber bot token format is valid"}
 
     if integration == "zoom":
@@ -67,5 +65,29 @@ def test_connection(integration: str, config: dict):
         if not client_id:
             return {"success": False, "message": "Client ID is required"}
         return {"success": True, "message": "Zoom credentials format is valid"}
+
+    if integration == "ai":
+        key = config.get("openai_api_key", "")
+        if not key:
+            return {"success": False, "message": "OpenAI API key is required"}
+        if not key.startswith("sk-"):
+            return {"success": False, "message": "API key should start with 'sk-'"}
+        return {"success": True, "message": f"OpenAI API key format valid (model: {config.get('model', 'gpt-4o-mini')})"}
+
+    if integration == "telegram":
+        token = config.get("bot_token", "")
+        if not token:
+            return {"success": False, "message": "Bot token is required"}
+        if ":" not in token:
+            return {"success": False, "message": "Invalid token format (should contain ':')"}
+        return {"success": True, "message": "Telegram bot token format is valid"}
+
+    if integration == "whatsapp":
+        sid = config.get("twilio_sid", "")
+        if not sid:
+            return {"success": False, "message": "Twilio Account SID is required"}
+        if not sid.startswith("AC"):
+            return {"success": False, "message": "Account SID should start with 'AC'"}
+        return {"success": True, "message": "Twilio credentials format is valid"}
 
     return {"success": False, "message": f"Unknown integration: {integration}"}
